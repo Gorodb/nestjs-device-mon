@@ -3,6 +3,9 @@ import { DepartmentsModule } from './departments/departments.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from './users/users.module';
+import { DevicesModule } from './devices/devices.module';
+import { DeviceTypesModule } from './device-types/device-types.module';
 
 @Module({
   imports: [
@@ -25,6 +28,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       }),
     }),
     DepartmentsModule,
+    UsersModule,
+    DevicesModule,
+    DeviceTypesModule,
   ],
   controllers: [],
   providers: [],
