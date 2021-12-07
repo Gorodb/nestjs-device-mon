@@ -1,25 +1,26 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDepartmentDto } from './dto/create-department.dto';
-import { DepartmentRepository } from './department.repository';
+import { DepartmentsRepository } from './departments.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DepartmentsEntity } from './departments.entity';
+import { Departments } from './departments.entity';
 import { Pagination } from '../paginate';
 import { PaginationOptionsDto } from '../paginate/pagination.options.dto';
+import { UpdateDepartmentDto } from './dto/update-department.dto';
 
 @Injectable()
 export class DepartmentsService {
   constructor(
-    @InjectRepository(DepartmentRepository)
-    private departmentRepository: DepartmentRepository,
+    @InjectRepository(DepartmentsRepository)
+    private departmentRepository: DepartmentsRepository,
   ) {}
 
   getDepartments(
     options: PaginationOptionsDto,
-  ): Promise<Pagination<DepartmentsEntity>> {
+  ): Promise<Pagination<Departments>> {
     return this.departmentRepository.getDepartments(options);
   }
 
-  async getDepartmentById(id: string): Promise<DepartmentsEntity> {
+  async getDepartmentById(id: string): Promise<Departments> {
     const found = await this.departmentRepository.findOne({ where: { id } });
     if (!found) {
       throw new NotFoundException(`Отдел с id '${id}' не найден.`);
@@ -29,20 +30,20 @@ export class DepartmentsService {
 
   createDepartment(
     createDepartmentDto: CreateDepartmentDto,
-  ): Promise<DepartmentsEntity> {
+  ): Promise<Departments> {
     return this.departmentRepository.createDepartment(createDepartmentDto);
   }
 
   async updateDepartment(
     id: string,
-    createDepartmentDto: CreateDepartmentDto,
-  ): Promise<DepartmentsEntity> {
+    updateDepartmentDto: UpdateDepartmentDto,
+  ): Promise<Departments> {
     const department = await this.getDepartmentById(id);
 
-    await this.departmentRepository.update(id, createDepartmentDto);
+    await this.departmentRepository.update(id, updateDepartmentDto);
     return {
       ...department,
-      ...createDepartmentDto,
+      ...updateDepartmentDto,
     };
   }
 

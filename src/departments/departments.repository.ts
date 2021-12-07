@@ -1,27 +1,27 @@
 import { Repository, EntityRepository } from 'typeorm';
-import { DepartmentsEntity } from './departments.entity';
+import { Departments } from './departments.entity';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import { Logger } from '@nestjs/common';
 import { Pagination, PaginationOptionsDto } from '../paginate';
 
-@EntityRepository(DepartmentsEntity)
-export class DepartmentRepository extends Repository<DepartmentsEntity> {
+@EntityRepository(Departments)
+export class DepartmentsRepository extends Repository<Departments> {
   private logger = new Logger('DepartmentRepository', true);
 
   async getDepartments(
     options: PaginationOptionsDto,
-  ): Promise<Pagination<DepartmentsEntity>> {
+  ): Promise<Pagination<Departments>> {
     const [results, total] = await this.findAndCount({
       skip: (options.page - 1) * options.limit,
       take: options.limit,
       order: { name: 'DESC' },
     });
-    return new Pagination<DepartmentsEntity>({ results, total });
+    return new Pagination<Departments>({ results, total });
   }
 
   async createDepartment(
     createDepartmentDto: CreateDepartmentDto,
-  ): Promise<DepartmentsEntity> {
+  ): Promise<Departments> {
     const { name, description } = createDepartmentDto;
 
     const department = this.create({ name, description });

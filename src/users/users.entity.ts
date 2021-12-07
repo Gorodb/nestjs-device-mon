@@ -1,11 +1,17 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { UsersRoles } from './enums/users.roles';
-import { DepartmentsEntity } from '../departments/departments.entity';
-import { DevicesEntity } from '../devices/devices.entity';
+import { Departments } from '../departments/departments.entity';
+import { Devices } from '../devices/devices.entity';
 
 @Entity()
-export class UsersEntity {
-  @OneToMany(() => DevicesEntity, (device) => device.ownerId)
+export class Users {
+  @OneToMany(() => Devices, (device: Devices) => device.ownerId)
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -34,8 +40,8 @@ export class UsersEntity {
   @Column()
   description: string;
 
-  @ManyToOne(() => DepartmentsEntity, (department) => department.id)
-  departmentId: DepartmentsEntity;
+  @ManyToOne(() => Departments, (department) => department.id)
+  departmentId: Departments;
 
   @Column({ default: null })
   logo: string;

@@ -1,9 +1,10 @@
 import { Body, Controller, Delete, Get, Logger, Param, Post, Put, Query, ValidationPipe } from '@nestjs/common';
 import { DepartmentsService } from './departments.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
-import { DepartmentsEntity } from './departments.entity';
+import { Departments } from './departments.entity';
 import { Pagination } from '../paginate';
-import { PaginationOptionsDto } from '../paginate/pagination.options.dto';
+import { PaginationOptionsDto } from '../paginate';
+import { UpdateDepartmentDto } from './dto/update-department.dto';
 
 @Controller('departments')
 export class DepartmentsController {
@@ -13,16 +14,16 @@ export class DepartmentsController {
   @Post()
   create(
     @Body() createDepartmentDto: CreateDepartmentDto,
-  ): Promise<DepartmentsEntity> {
+  ): Promise<Departments> {
     return this.departmentService.createDepartment(createDepartmentDto);
   }
 
   @Put('/:id')
   update(
     @Param('id') id: string,
-    @Body() createDepartmentDto: CreateDepartmentDto,
-  ): Promise<DepartmentsEntity> {
-    return this.departmentService.updateDepartment(id, createDepartmentDto);
+    @Body() updateDepartmentDto: UpdateDepartmentDto,
+  ): Promise<Departments> {
+    return this.departmentService.updateDepartment(id, updateDepartmentDto);
   }
 
   @Delete('/:id')
@@ -32,18 +33,14 @@ export class DepartmentsController {
 
   @Get()
   getAll(
-    @Query(
-      new ValidationPipe({
-        transformOptions: { enableImplicitConversion: true },
-      }),
-    )
-    paginationOptions: PaginationOptionsDto = { limit: 10, page: 0 },
-  ): Promise<Pagination<DepartmentsEntity>> {
+    @Query(new ValidationPipe())
+    paginationOptions: PaginationOptionsDto = { limit: 10, page: 1 },
+  ): Promise<Pagination<Departments>> {
     return this.departmentService.getDepartments(paginationOptions);
   }
 
   @Get('/:id')
-  getById(@Param('id') id: string): Promise<DepartmentsEntity> {
+  getById(@Param('id') id: string): Promise<Departments> {
     return this.departmentService.getDepartmentById(id);
   }
 }

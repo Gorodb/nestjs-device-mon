@@ -1,24 +1,24 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { DepartmentsEntity } from '../departments/departments.entity';
-import { UsersEntity } from '../users/users.entity';
-import { DeviceTypesEntity } from '../device-types/device-types.entity';
+import { Departments } from '../departments/departments.entity';
+import { Users } from '../users/users.entity';
+import { DeviceTypes } from '../device-types/device-types.entity';
 
 @Entity()
-export class DevicesEntity {
+export class Devices {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   name: string;
 
-  @ManyToOne(() => UsersEntity, (user) => user.id)
-  ownerId: UsersEntity;
+  @ManyToOne(() => Users, (user) => user.id)
+  ownerId: Users;
 
-  @ManyToOne(() => UsersEntity, (user) => user.id)
-  updatedByUser: UsersEntity;
+  @ManyToOne(() => Users, (user) => user.id)
+  updatedByUser: Users;
 
-  @ManyToOne(() => DeviceTypesEntity, (deviceType) => deviceType.id)
-  deviceTypeId: DeviceTypesEntity;
+  @ManyToOne(() => DeviceTypes, (deviceType) => deviceType.id)
+  deviceTypeId: DeviceTypes;
 
   @Column()
   osName: string;
@@ -26,8 +26,8 @@ export class DevicesEntity {
   @Column()
   defaultLocation: string;
 
-  @ManyToOne(() => DepartmentsEntity, (department) => department.id)
-  departmentId: DepartmentsEntity;
+  @ManyToOne(() => Departments, (department) => department.id)
+  departmentId: Departments;
 
   @Column()
   currentLocation: string;
