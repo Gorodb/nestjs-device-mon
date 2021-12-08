@@ -5,12 +5,16 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { UsersRoles } from './enums/users.roles';
-import { Departments } from '../departments/departments.entity';
-import { Devices } from '../devices/devices.entity';
+import { UsersRoles } from '../enums/users.roles';
+import { Departments } from '../../departments/departments.entity';
+import { Devices } from '../../devices/devices.entity';
+import { PinCodes } from './pinCodes.entity';
+import { Exclude } from 'class-transformer';
+import { BaseEntity } from '../../baseEntity/BaseEntity';
 
 @Entity()
-export class Users {
+export class Users extends BaseEntity {
+  @OneToMany(() => PinCodes, (pinCode: PinCodes) => pinCode.user)
   @OneToMany(() => Devices, (device: Devices) => device.ownerId)
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -22,9 +26,10 @@ export class Users {
   email: string;
 
   @Column()
+  @Exclude()
   password: string;
 
-  @Column({ length: 100 })
+  @Column({ length: 100, default: null })
   name: string;
 
   @Column({
@@ -34,10 +39,10 @@ export class Users {
   })
   role: UsersRoles;
 
-  @Column()
+  @Column({ default: null })
   phone: string;
 
-  @Column()
+  @Column({ default: null })
   description: string;
 
   @ManyToOne(() => Departments, (department) => department.id)
@@ -45,4 +50,8 @@ export class Users {
 
   @Column({ default: null })
   logo: string;
+
+  @Column({ default: false })
+  @Exclude()
+  verified: boolean;
 }

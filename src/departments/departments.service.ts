@@ -3,8 +3,7 @@ import { CreateDepartmentDto } from './dto/create-department.dto';
 import { DepartmentsRepository } from './departments.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Departments } from './departments.entity';
-import { Pagination } from '../paginate';
-import { PaginationOptionsDto } from '../paginate/pagination.options.dto';
+import { Pagination, PaginationOptionsDto } from '../paginate';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
 
 @Injectable()

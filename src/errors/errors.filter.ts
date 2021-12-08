@@ -19,6 +19,8 @@ export class ErrorFilter implements ExceptionFilter {
         ? error.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
+    console.log(error);
+
     if (error.code === '23505') {
       return response
         .status(status)

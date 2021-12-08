@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Departments } from '../departments/departments.entity';
-import { Users } from '../users/users.entity';
+import { Users } from '../users/entities/users.entity';
 import { DeviceTypes } from '../device-types/device-types.entity';
 
 @Entity()

@@ -6,10 +6,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { DevicesModule } from './devices/devices.module';
 import { DeviceTypesModule } from './device-types/device-types.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      isGlobal: true,
       envFilePath: [`.env.stage.${process.env.STAGE}`],
       validationSchema: configValidationSchema,
     }),
@@ -31,6 +33,7 @@ import { DeviceTypesModule } from './device-types/device-types.module';
     UsersModule,
     DevicesModule,
     DeviceTypesModule,
+    MailModule,
   ],
   controllers: [],
   providers: [],
