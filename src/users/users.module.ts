@@ -7,7 +7,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { PinCodesRepository } from './repositories/pinCodes.repository';
+import { PinCodesRepository } from './repositories/pin-codes.repository';
 import { MailModule } from '../mail/mail.module';
 
 @Module({
@@ -21,7 +21,7 @@ import { MailModule } from '../mail/mail.module';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get('JWT_SECRET'),
-        signOptions: { expiresIn: 3600 },
+        signOptions: { expiresIn: '90d' },
       }),
     }),
   ],

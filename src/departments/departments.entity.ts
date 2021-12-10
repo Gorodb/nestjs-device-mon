@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Users } from '../users/entities/users.entity';
 import { Devices } from '../devices/devices.entity';
-import { BaseEntity } from '../baseEntity/BaseEntity';
+import { BaseEntity } from '../base-entity/base-entity';
 
 @Entity()
 export class Departments extends BaseEntity {

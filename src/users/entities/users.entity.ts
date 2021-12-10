@@ -5,17 +5,17 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { UsersRoles } from '../enums/users.roles';
+import { UsersRoles } from '../enums/users-roles.enum';
 import { Departments } from '../../departments/departments.entity';
 import { Devices } from '../../devices/devices.entity';
-import { PinCodes } from './pinCodes.entity';
+import { PinCodes } from './pin-codes.entity';
 import { Exclude } from 'class-transformer';
-import { BaseEntity } from '../../baseEntity/BaseEntity';
+import { BaseEntity } from '../../base-entity/base-entity';
 
 @Entity()
 export class Users extends BaseEntity {
   @OneToMany(() => PinCodes, (pinCode: PinCodes) => pinCode.user)
-  @OneToMany(() => Devices, (device: Devices) => device.ownerId)
+  @OneToMany(() => Devices, (device: Devices) => device.owner)
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -46,7 +46,7 @@ export class Users extends BaseEntity {
   description: string;
 
   @ManyToOne(() => Departments, (department) => department.id)
-  departmentId: Departments;
+  department: Departments;
 
   @Column({ default: null })
   logo: string;

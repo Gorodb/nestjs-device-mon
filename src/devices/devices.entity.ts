@@ -11,14 +11,16 @@ export class Devices {
   @Column()
   name: string;
 
+  @Column()
   @ManyToOne(() => Users, (user) => user.id)
-  ownerId: Users;
+  owner: string;
 
+  @Column()
   @ManyToOne(() => Users, (user) => user.id)
-  updatedByUser: Users;
+  updatedByUser: string;
 
   @ManyToOne(() => DeviceTypes, (deviceType) => deviceType.id)
-  deviceTypeId: DeviceTypes;
+  deviceType: DeviceTypes;
 
   @Column()
   osName: string;
@@ -27,7 +29,7 @@ export class Devices {
   defaultLocation: string;
 
   @ManyToOne(() => Departments, (department) => department.id)
-  departmentId: Departments;
+  department: Departments;
 
   @Column()
   currentLocation: string;

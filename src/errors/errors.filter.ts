@@ -4,10 +4,10 @@ import {
   HttpException,
   ArgumentsHost,
   HttpStatus,
-  ConflictException,
   UnauthorizedException,
   NotFoundException,
   InternalServerErrorException,
+  ForbiddenException,
 } from '@nestjs/common';
 
 @Catch()
@@ -19,12 +19,14 @@ export class ErrorFilter implements ExceptionFilter {
         ? error.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
-    console.log(error);
+    console.error(error.name);
+    console.error(error);
 
-    if (error.code === '23505') {
-      return response
-        .status(status)
-        .send(new ConflictException('Username already exists'));
+    if (error.name === 'TokenExpiredError') {
+      return response.status(status).send({
+        ...new ForbiddenException('Токен устарел'),
+        debug: error.message,
+      });
     }
 
     if (error.status && error.response) {
@@ -32,15 +34,20 @@ export class ErrorFilter implements ExceptionFilter {
     }
 
     if (status === HttpStatus.UNAUTHORIZED) {
-      return response
-        .status(status)
-        .send(new UnauthorizedException('User is not authorised'));
+      return response.status(status).send({
+        ...new UnauthorizedException('Необходима авторизация'),
+        debug: error.message,
+      });
     }
 
     if (status === HttpStatus.NOT_FOUND) {
-      return response.status(status).send(new NotFoundException());
+      return response
+        .status(status)
+        .send({ ...new NotFoundException('Не найдено'), debug: error.message });
     }
 
-    return response.status(status).send(new InternalServerErrorException());
+    return response
+      .status(status)
+      .send({ ...new InternalServerErrorException(), debug: error.message });
   }
 }
