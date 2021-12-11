@@ -1,31 +1,15 @@
 import {
   createParamDecorator,
-  ExecutionContext, ForbiddenException,
-  UnauthorizedException,
+  ExecutionContext,
+  ForbiddenException,
 } from '@nestjs/common';
 import { Users } from './entities/users.entity';
-import { JwtPayload } from './jwt-payload.interface';
+import { JwtPayload } from './jwt/jwt-payload.interface';
 
 export const GetUser = createParamDecorator(
   (_data, context: ExecutionContext): Users => {
     const req = context.switchToHttp().getRequest();
     return req.user;
-  },
-);
-
-export const GetJwtPayload = createParamDecorator(
-  (_data, context: ExecutionContext): JwtPayload => {
-    const req = context.switchToHttp().getRequest();
-    const token = req.headers.access_token;
-    if (!token) {
-      throw new ForbiddenException('Передан некорректный токен');
-    }
-    try {
-      return JSON.parse(atob(token.split('.')[1]));
-    } catch (err) {
-      console.log(err);
-      throw new ForbiddenException('Передан некорректный токен');
-    }
   },
 );
 

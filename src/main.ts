@@ -4,6 +4,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ErrorFilter } from './errors/errors.filter';
 import { TransformInterceptor } from './transform.interceptor';
+import { RolesGuard } from './guards/roles.guard';
 
 async function bootstrap() {
   const logger = new Logger();

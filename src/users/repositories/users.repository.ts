@@ -4,7 +4,7 @@ import { Users } from '../entities/users.entity';
 import { Logger, BadRequestException } from '@nestjs/common';
 import { SignUpCredentialsDto } from '../dto/signUp-credentials.dto';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from '../jwt-payload.interface';
+import { JwtPayload } from '../jwt/jwt-payload.interface';
 
 @EntityRepository(Users)
 export class UsersRepository extends Repository<Users> {

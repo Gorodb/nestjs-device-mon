@@ -9,14 +9,14 @@ import { SignInCredentialsDto } from './dto/signIn-credentials.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersRepository } from './repositories/users.repository';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from './jwt-payload.interface';
+import { JwtPayload } from './jwt/jwt-payload.interface';
 import { PinCodesRepository } from './repositories/pin-codes.repository';
 import { Actions } from './enums/actions.enum';
 import { MailService } from '../mail/mail.service';
-import { PinCodes } from './entities/pin-codes.entity';
 import { PinCodesDto } from './dto/pin-codes.dto';
 import { TokenTypes } from './enums/token-types.enum';
 import { Users } from './entities/users.entity';
+import { FillUserDataDto } from './dto/fill-user-data.dto';
 
 @Injectable()
 export class AuthService {
@@ -28,6 +28,14 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
   ) {}
+
+  async fillUserData(
+    fillUserDataDto: FillUserDataDto,
+    user: Users,
+  ): Promise<Users> {
+    console.log(user);
+    return this.usersRepository.findOne(user.id);
+  }
 
   async signUp(
     signUpCredentialsDto: SignUpCredentialsDto,
