@@ -29,14 +29,6 @@ export class AuthService {
     private readonly mailService: MailService,
   ) {}
 
-  async fillUserData(
-    fillUserDataDto: FillUserDataDto,
-    user: Users,
-  ): Promise<Users> {
-    console.log(user);
-    return this.usersRepository.findOne(user.id);
-  }
-
   async signUp(
     signUpCredentialsDto: SignUpCredentialsDto,
   ): Promise<{ success: boolean; accessToken?: string }> {
@@ -60,39 +52,38 @@ export class AuthService {
     }
   }
 
+  async validateForgotPasswordCode(
+    pinCodesDto: PinCodesDto,
+    token: string,
+    user: Users,
+  ): Promise<{ success: true; accessToken: string }> {
+    const encodedToken: JwtPayload = this.jwtService.verify(token);
+    if (!user || encodedToken.type !== TokenTypes.NORMAL) {
+      throw new ForbiddenException('Токен не действителен');
+    }
+    const code = await this.pinCodesRepository.getPinCode(pinCodesDto, user.id);
+    await this.pinCodesRepository.setCodeUsed(code);
+    const accessToken = generateAccessToken(user.email, this.jwtService);
+    return { success: true, ...accessToken };
+  }
+
   async validateCode(
     pinCodesDto: PinCodesDto,
     token: string,
+    user: Users,
   ): Promise<{ success: true; accessToken: string }> {
     const encodedToken: JwtPayload = this.jwtService.verify(token);
-    const user: Users = await this.usersRepository.findOne({
-      email: encodedToken.email,
-    });
-    switch (pinCodesDto.action) {
-      case Actions.REGISTRATION:
-        if (!user || encodedToken.type !== TokenTypes.RESTRICTED) {
-          throw new ForbiddenException('Токен не действителен');
-        }
-        const pinCode = await this.pinCodesRepository.getPinCode(
-          pinCodesDto,
-          user.id,
-        );
-        await this.pinCodesRepository.setCodeUsed(pinCode);
-        await this.usersRepository.update(pinCode.user, { verified: true });
-        let accessToken = generateAccessToken(user.email, this.jwtService);
-        return { ...accessToken, success: true };
-      case Actions.FORGOT_PASSWORD:
-        if (!user || encodedToken.type !== TokenTypes.NORMAL) {
-          throw new ForbiddenException('Токен не действителен');
-        }
-        const code = await this.pinCodesRepository.getPinCode(
-          pinCodesDto,
-          user.id,
-        );
-        await this.pinCodesRepository.setCodeUsed(code);
-        accessToken = generateAccessToken(user.email, this.jwtService);
-        return { success: true, ...accessToken };
+    if (!user || encodedToken.type !== TokenTypes.RESTRICTED) {
+      throw new ForbiddenException('Токен не действителен');
     }
+    const pinCode = await this.pinCodesRepository.getPinCode(
+      pinCodesDto,
+      user.id,
+    );
+    await this.pinCodesRepository.setCodeUsed(pinCode);
+    await this.usersRepository.update(pinCode.user, { verified: true });
+    const accessToken = generateAccessToken(user.email, this.jwtService);
+    return { ...accessToken, success: true };
   }
 
   async resendCode(

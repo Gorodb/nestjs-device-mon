@@ -8,7 +8,6 @@ import {
   Post,
   Put,
   Query,
-  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { DepartmentsService } from './departments.service';
@@ -48,7 +47,6 @@ export class DepartmentsController {
   }
 
   @Get()
-  @Roles(UsersRoles.ADMIN)
   getAll(
     @Query(new ValidationPipe())
     paginationOptions: PaginationOptionsDto = { limit: 10, page: 1 },
@@ -57,7 +55,6 @@ export class DepartmentsController {
   }
 
   @Get('/:id')
-  @Roles(UsersRoles.ADMIN)
   getById(@Param('id') id: string): Promise<Departments> {
     return this.departmentService.getDepartmentById(id);
   }

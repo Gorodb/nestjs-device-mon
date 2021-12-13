@@ -29,14 +29,9 @@ export class ErrorFilter implements ExceptionFilter {
       });
     }
 
-    if (error.status && error.response) {
-      return response.status(error.status).send(error.response);
-    }
-
     if (status === HttpStatus.UNAUTHORIZED) {
       return response.status(status).send({
-        ...new UnauthorizedException('Необходима авторизация'),
-        debug: error.message,
+        ...new UnauthorizedException(error.message),
       });
     }
 
@@ -44,6 +39,10 @@ export class ErrorFilter implements ExceptionFilter {
       return response
         .status(status)
         .send({ ...new NotFoundException('Не найдено'), debug: error.message });
+    }
+
+    if (error.status && error.response) {
+      return response.status(error.status).send(error.response);
     }
 
     return response

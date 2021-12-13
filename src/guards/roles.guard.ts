@@ -26,6 +26,9 @@ export class RolesGuard implements CanActivate {
     }
     const request = context.switchToHttp().getRequest();
     const user: Users = request.user;
+    if (user.role === UsersRoles.ADMIN) {
+      return true;
+    }
     if (!roles.includes(user.role)) {
       throw new ForbiddenException('Это действие недоступно');
     }

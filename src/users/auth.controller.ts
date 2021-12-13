@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpCredentialsDto } from './dto/signUp-credentials.dto';
 import { SignInCredentialsDto } from './dto/signIn-credentials.dto';
@@ -7,20 +7,12 @@ import { GetJwtToken, GetUser } from './users.decorator';
 import { SendCodeDto } from './dto/send-code.dto';
 import { Users } from './entities/users.entity';
 import { FillUserDataDto } from './dto/fill-user-data.dto';
-import { AuthGuard } from '@nestjs/passport';
+import { Roles } from '../guards/roles.guard';
+import { UsersRoles } from './enums/users-roles.enum';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
-  @UseGuards(AuthGuard())
-  @Post('/update_user')
-  updateUserData(
-    @GetUser() user: Users,
-    @Body() fillUserDataDto: FillUserDataDto,
-  ): Promise<Users> {
-    return this.authService.fillUserData(fillUserDataDto, user);
-  }
 
   @Post('/signup')
   signUp(
@@ -39,11 +31,26 @@ export class AuthController {
   @Post('/validate')
   validate(
     @GetJwtToken() token: string,
+    @GetUser() user: Users,
     @Body() pinCodesDto: PinCodesDto,
   ): Promise<{ success: boolean; accessToken?: string }> {
-    return this.authService.validateCode(pinCodesDto, token);
+    return this.authService.validateCode(pinCodesDto, token, user);
   }
 
+  @Post('/validate_forgot_password_code')
+  validateForgotPasswordCode(
+    @GetJwtToken() token: string,
+    @GetUser() user: Users,
+    @Body() pinCodesDto: PinCodesDto,
+  ): Promise<{ success: boolean; accessToken?: string }> {
+    return this.authService.validateForgotPasswordCode(
+      pinCodesDto,
+      token,
+      user,
+    );
+  }
+
+  @Roles(UsersRoles.USER)
   @Post('/send_code')
   forgotPassword(
     @GetJwtToken() token: string,
