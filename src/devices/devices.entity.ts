@@ -11,14 +11,15 @@ export class Devices {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ type: 'uuid', default: null })
   @ManyToOne(() => Users, (user) => user.id)
-  owner: string;
+  owner: Users;
 
   @Column()
   @ManyToOne(() => Users, (user) => user.id)
   updatedByUser: string;
 
+  @Column({ type: 'uuid', default: null })
   @ManyToOne(() => DeviceTypes, (deviceType) => deviceType.id)
   deviceType: DeviceTypes;
 
@@ -28,6 +29,7 @@ export class Devices {
   @Column()
   defaultLocation: string;
 
+  @Column({ type: 'uuid', default: null })
   @ManyToOne(() => Departments, (department) => department.id)
   department: Departments;
 

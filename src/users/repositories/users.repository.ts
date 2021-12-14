@@ -78,7 +78,7 @@ export class UsersRepository extends Repository<Users> {
         `Не удалось обновить пользователя с id ${user.id}`,
       );
     }
-    return user;
+    return { ...user, ...createUserDto };
   }
 
   private async hashPassword(

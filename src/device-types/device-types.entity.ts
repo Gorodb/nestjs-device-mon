@@ -12,4 +12,7 @@ export class DeviceTypes {
 
   @Column()
   title: string;
+
+  @Column()
+  description: string;
 }

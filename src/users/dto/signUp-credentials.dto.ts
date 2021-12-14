@@ -1,4 +1,4 @@
-import { IsString, Matches, MinLength } from 'class-validator';
+import { IsString, IsUUID, Matches, MinLength } from 'class-validator';
 
 export class SignUpCredentialsDto {
   @IsString()
@@ -13,4 +13,8 @@ export class SignUpCredentialsDto {
     message: 'Введенный пароль слишком слабый.',
   })
   password: string;
+
+  @IsUUID('all', { message: 'Id отдела должен быть UID' })
+  @IsString({ message: 'Id отдела должен быть UID' })
+  department: string;
 }

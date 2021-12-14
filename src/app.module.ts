@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { DevicesModule } from './devices/devices.module';
 import { DeviceTypesModule } from './device-types/device-types.module';
 import { MailModule } from './mail/mail.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { MailModule } from './mail/mail.module';
     DevicesModule,
     DeviceTypesModule,
     MailModule,
+    FilesModule,
   ],
   controllers: [],
   providers: [],

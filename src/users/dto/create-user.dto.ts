@@ -1,7 +1,8 @@
-import { IsEnum, IsOptional, IsString, Length } from 'class-validator';
+import { IsEnum, IsInstance, IsJSON, IsNotEmptyObject, IsObject, IsOptional, IsString, Length } from 'class-validator';
 import { UsersRoles } from '../enums/users-roles.enum';
 import { enumToString } from '../../helpers/enum-helper';
 import { SignUpCredentialsDto } from './signUp-credentials.dto';
+import { FileElementResponseDto } from '../../files/dto/file-element-response.dto';
 
 export class CreateUserDto extends SignUpCredentialsDto {
   @IsOptional()
@@ -22,4 +23,12 @@ export class CreateUserDto extends SignUpCredentialsDto {
   @IsOptional()
   @IsString({ message: 'Неправильно введено имя' })
   name?: string;
+
+  @IsOptional()
+  @IsNotEmptyObject(
+    { nullable: true },
+    { message: 'Логотип должен быть валидным json-ом' },
+  )
+  @IsObject({ message: 'Логотип должен быть валидным json-ом' })
+  logo: FileElementResponseDto;
 }

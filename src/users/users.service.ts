@@ -8,6 +8,8 @@ import { UsersRepository } from './repositories/users.repository';
 import { Users } from './entities/users.entity';
 import { FillUserDataDto } from './dto/fill-user-data.dto';
 import { CreateUserDto } from './dto/create-user.dto';
+import { paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
+import { UsersPaginationConfig } from './users.pagination-config';
 
 @Injectable()
 export class UsersService {
@@ -34,17 +36,6 @@ export class UsersService {
   ): Promise<Users> {
     const user = await this.getUserById(id);
     return this.usersRepository.updateUserByAdmin(user, createUserDataDTO);
-    // const affected = await this.usersRepository.update(id, {
-    //   ...user,
-    //   ...createUserDataDTO,
-    //   verified: true,
-    // });
-    // if (!affected.affected) {
-    //   throw new BadRequestException(
-    //     `Не удалось обновить пользователя с id ${id}`,
-    //   );
-    // }
-    // return { ...user, ...createUserDataDTO };
   }
 
   async deleteUser(id: string): Promise<{ success: boolean }> {
@@ -64,5 +55,9 @@ export class UsersService {
       throw new NotFoundException(`Пользователь с id ${id} не найден`);
     }
     return user;
+  }
+
+  getAllUsers(query: PaginateQuery): Promise<Paginated<Users>> {
+    return paginate(query, this.usersRepository, UsersPaginationConfig);
   }
 }

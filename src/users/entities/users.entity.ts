@@ -11,6 +11,7 @@ import { Devices } from '../../devices/devices.entity';
 import { PinCodes } from './pin-codes.entity';
 import { Exclude } from 'class-transformer';
 import { BaseEntity } from '../../base-entity/base-entity';
+import { FileElementResponseDto } from '../../files/dto/file-element-response.dto';
 
 @Entity()
 export class Users extends BaseEntity {
@@ -45,11 +46,12 @@ export class Users extends BaseEntity {
   @Column({ default: null })
   description: string;
 
+  @Column({ type: 'uuid', default: null })
   @ManyToOne(() => Departments, (department) => department.id)
-  department: Departments;
+  department: string;
 
-  @Column({ default: null })
-  logo: string;
+  @Column({ default: null, type: 'json' })
+  logo: FileElementResponseDto; // JSON<FileElementResponseDto>;
 
   @Column({ default: false })
   @Exclude()
