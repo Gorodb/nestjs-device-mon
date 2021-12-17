@@ -6,7 +6,6 @@ import { BaseEntity } from '../base-entity/base-entity';
 @Entity()
 export class Departments extends BaseEntity {
   @OneToMany(() => Devices, (device) => device.id)
-  @OneToMany(() => Users, (user) => user.id)
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -15,4 +14,7 @@ export class Departments extends BaseEntity {
 
   @Column()
   description: string;
+
+  @OneToMany(() => Users, (user) => user.id)
+  users: Users[];
 }

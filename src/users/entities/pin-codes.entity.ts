@@ -9,7 +9,7 @@ export class PinCodes extends BaseEntity {
   id: string;
 
   @Column()
-  @ManyToOne(() => Users, (user: Users) => user.id)
+  @ManyToOne(() => Users, (user: Users) => user.id, { onDelete: 'CASCADE' })
   user: string;
 
   @Column({

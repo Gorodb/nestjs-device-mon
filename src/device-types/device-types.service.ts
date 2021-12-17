@@ -4,7 +4,6 @@ import { paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 import { DeviceTypesDto } from './dto/device-types.dto';
 import { DeviceTypesRepository } from './device-types.repository';
 import { DeviceTypes } from './device-types.entity';
-import { DepartmentsPaginationConfig } from '../departments/departments.pagination-config';
 import { DeviceTypesPaginationConfig } from './device-types.pagination-config';
 
 @Injectable()

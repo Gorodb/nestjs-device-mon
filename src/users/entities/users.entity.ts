@@ -46,12 +46,11 @@ export class Users extends BaseEntity {
   @Column({ default: null })
   description: string;
 
-  @Column({ type: 'uuid', default: null })
-  @ManyToOne(() => Departments, (department) => department.id)
-  department: string;
+  @ManyToOne(() => Departments, (department) => department.id, { eager: true })
+  department: Departments;
 
   @Column({ default: null, type: 'json' })
-  logo: FileElementResponseDto; // JSON<FileElementResponseDto>;
+  logo: FileElementResponseDto;
 
   @Column({ default: false })
   @Exclude()

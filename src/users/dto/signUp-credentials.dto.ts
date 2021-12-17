@@ -1,4 +1,5 @@
 import { IsString, IsUUID, Matches, MinLength } from 'class-validator';
+import { Departments } from '../../departments/departments.entity';
 
 export class SignUpCredentialsDto {
   @IsString()
@@ -16,5 +17,5 @@ export class SignUpCredentialsDto {
 
   @IsUUID('all', { message: 'Id отдела должен быть UID' })
   @IsString({ message: 'Id отдела должен быть UID' })
-  department: string;
+  department: Departments;
 }

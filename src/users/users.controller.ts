@@ -1,12 +1,14 @@
 import {
   Body,
   Controller,
+  Query,
   Delete,
   Get,
   Param,
   Patch,
   Post,
   Put,
+  ValidationPipe,
 } from '@nestjs/common';
 import { Roles } from '../guards/roles.guard';
 import { UsersRoles } from './enums/users-roles.enum';
@@ -15,7 +17,7 @@ import { Users } from './entities/users.entity';
 import { FillUserDataDto } from './dto/fill-user-data.dto';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
+import { Pagination, PaginationOptionsDto } from '../paginate';
 
 @Controller('users')
 export class UsersController {
@@ -46,7 +48,7 @@ export class UsersController {
   }
 
   @Roles(UsersRoles.ADMIN)
-  @Delete('/delete')
+  @Delete('/:id')
   deleteUser(@Param('id') id: string): Promise<{ success: boolean }> {
     return this.usersService.deleteUser(id);
   }
@@ -59,7 +61,10 @@ export class UsersController {
 
   @Roles(UsersRoles.ADMIN)
   @Get('/get')
-  getAllUsers(@Paginate() query: PaginateQuery): Promise<Paginated<Users>> {
-    return this.usersService.getAllUsers(query);
+  getAllUsers(
+    @Query() paginationOptions: PaginationOptionsDto,
+    @Query('search') search: string,
+  ): Promise<Pagination<Users>> {
+    return this.usersService.getAllUsers(paginationOptions, search);
   }
 }

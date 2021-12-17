@@ -1,4 +1,13 @@
-import { IsEnum, IsInstance, IsJSON, IsNotEmptyObject, IsObject, IsOptional, IsString, Length } from 'class-validator';
+import {
+  IsEnum,
+  IsInstance,
+  IsJSON,
+  IsNotEmptyObject,
+  IsObject,
+  IsOptional,
+  IsString,
+  Length,
+} from 'class-validator';
 import { UsersRoles } from '../enums/users-roles.enum';
 import { enumToString } from '../../helpers/enum-helper';
 import { SignUpCredentialsDto } from './signUp-credentials.dto';

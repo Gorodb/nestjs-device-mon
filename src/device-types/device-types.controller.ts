@@ -14,17 +14,17 @@ import { DeviceTypes } from './device-types.entity';
 import { DeviceTypesService } from './device-types.service';
 import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 
-@Controller('device-types')
+@Controller('device_types')
 export class DeviceTypesController {
   constructor(private readonly deviceTypesService: DeviceTypesService) {}
 
-  @Post('/create')
+  @Post('')
   @Roles(UsersRoles.ADMIN)
   create(@Body() deviceTypesDto: DeviceTypesDto): Promise<DeviceTypes> {
     return this.deviceTypesService.createDeviceType(deviceTypesDto);
   }
 
-  @Put('/update/:id')
+  @Put('/:id')
   @Roles(UsersRoles.ADMIN)
   update(
     @Body() deviceTypesDto: DeviceTypesDto,
@@ -33,20 +33,19 @@ export class DeviceTypesController {
     return this.deviceTypesService.updateDeviceType(id, deviceTypesDto);
   }
 
-  @Delete('/delete/:id')
+  @Delete('/:id')
   @Roles(UsersRoles.ADMIN)
   delete(@Param('id') id: string): Promise<{ success: boolean }> {
     return this.deviceTypesService.deleteDeviceType(id);
   }
 
-  @Get('/get/:id')
+  @Get('/:id')
   @Roles(UsersRoles.ADMIN)
   get(@Param('id') id: string): Promise<DeviceTypes> {
     return this.deviceTypesService.getDeviceTypeById(id);
   }
 
-  @Get('/get')
-  @Roles(UsersRoles.USER)
+  @Get('')
   getAll(@Paginate() query: PaginateQuery): Promise<Paginated<DeviceTypes>> {
     return this.deviceTypesService.getAllDeviceTypes(query);
   }

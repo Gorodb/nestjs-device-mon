@@ -8,14 +8,16 @@ import { UsersRepository } from './repositories/users.repository';
 import { Users } from './entities/users.entity';
 import { FillUserDataDto } from './dto/fill-user-data.dto';
 import { CreateUserDto } from './dto/create-user.dto';
-import { paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
-import { UsersPaginationConfig } from './users.pagination-config';
+import { Pagination, PaginationOptionsDto } from '../paginate';
+import { DepartmentsRepository } from '../departments/departments.repository';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UsersRepository)
     private readonly usersRepository: UsersRepository,
+    @InjectRepository(DepartmentsRepository)
+    private readonly departmentsRepository: DepartmentsRepository,
   ) {}
 
   async fillUserData(
@@ -26,8 +28,14 @@ export class UsersService {
     return this.usersRepository.findOne(user.id);
   }
 
-  createUser(createUserDataDTO: CreateUserDto): Promise<Users> {
-    return this.usersRepository.createUserByAdmin(createUserDataDTO);
+  async createUser(createUserDataDTO: CreateUserDto): Promise<Users> {
+    const department = await this.departmentsRepository.findOne(
+      createUserDataDTO.department,
+    );
+    return this.usersRepository.createUserByAdmin(
+      createUserDataDTO,
+      department,
+    );
   }
 
   async updateUser(
@@ -35,7 +43,14 @@ export class UsersService {
     id: string,
   ): Promise<Users> {
     const user = await this.getUserById(id);
-    return this.usersRepository.updateUserByAdmin(user, createUserDataDTO);
+    const department = await this.departmentsRepository.findOne(
+      createUserDataDTO.department,
+    );
+    return this.usersRepository.updateUserByAdmin(
+      user,
+      department,
+      createUserDataDTO,
+    );
   }
 
   async deleteUser(id: string): Promise<{ success: boolean }> {
@@ -46,7 +61,7 @@ export class UsersService {
         message: `Не удалось удалить пользователя с id ${id}`,
       });
     }
-    return Promise.resolve({ success: false });
+    return { success: true };
   }
 
   async getUserById(id: string): Promise<Users> {
@@ -57,7 +72,28 @@ export class UsersService {
     return user;
   }
 
-  getAllUsers(query: PaginateQuery): Promise<Paginated<Users>> {
-    return paginate(query, this.usersRepository, UsersPaginationConfig);
+  async getAllUsers(
+    options: PaginationOptionsDto,
+    search?: string,
+  ): Promise<Pagination<Users>> {
+    const queryBuilder = this.usersRepository.createQueryBuilder('users');
+    if (search) {
+      queryBuilder.where(
+        '(LOWER(users.email) LIKE LOWER(:search) OR LOWER(users.name) LIKE LOWER(:search))',
+        { search: `%${search}%` },
+      );
+    }
+    queryBuilder
+      .skip((options.page - 1) * options.limit)
+      .take(options.limit)
+      .leftJoinAndSelect('users.department', 'department')
+      .orderBy('users.created', 'DESC');
+    const [results, total] = await queryBuilder.getManyAndCount();
+    return new Pagination<Users>({
+      results,
+      total,
+      page: options.page,
+      limit: options.limit,
+    });
   }
 }

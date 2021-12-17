@@ -6,6 +6,7 @@ import { SignUpCredentialsDto } from '../dto/signUp-credentials.dto';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from '../jwt/jwt-payload.interface';
 import { CreateUserDto } from '../dto/create-user.dto';
+import { Departments } from '../../departments/departments.entity';
 
 @EntityRepository(Users)
 export class UsersRepository extends Repository<Users> {
@@ -42,11 +43,15 @@ export class UsersRepository extends Repository<Users> {
     return user;
   }
 
-  async createUserByAdmin(createUserDto: CreateUserDto): Promise<Users> {
+  async createUserByAdmin(
+    createUserDto: CreateUserDto,
+    department: Departments,
+  ): Promise<Users> {
     const { password, email } = createUserDto;
     const hashedPassword = await this.hashPassword(password, email);
     const user = this.create({
       ...createUserDto,
+      department: department,
       password: hashedPassword,
       verified: true,
     });
@@ -62,6 +67,7 @@ export class UsersRepository extends Repository<Users> {
 
   async updateUserByAdmin(
     user: Users,
+    department: Departments,
     createUserDto: CreateUserDto,
   ): Promise<Users> {
     const password = createUserDto.password
@@ -70,6 +76,7 @@ export class UsersRepository extends Repository<Users> {
     const affected = await this.update(user.id, {
       ...user,
       ...createUserDto,
+      department,
       password,
       verified: true,
     });

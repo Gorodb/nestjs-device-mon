@@ -11,12 +11,17 @@ import { PinCodesRepository } from './repositories/pin-codes.repository';
 import { MailModule } from '../mail/mail.module';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
+import { DepartmentsRepository } from '../departments/departments.repository';
 
 @Module({
   imports: [
     MailModule,
     ConfigModule,
-    TypeOrmModule.forFeature([UsersRepository, PinCodesRepository]),
+    TypeOrmModule.forFeature([
+      UsersRepository,
+      PinCodesRepository,
+      DepartmentsRepository,
+    ]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
