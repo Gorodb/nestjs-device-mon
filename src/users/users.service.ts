@@ -1,15 +1,12 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersRepository } from './repositories/users.repository';
 import { Users } from './entities/users.entity';
 import { FillUserDataDto } from './dto/fill-user-data.dto';
 import { CreateUserDto } from './dto/create-user.dto';
-import { Pagination, PaginationOptionsDto } from '../paginate';
+import { OrderEnum, Pagination, PaginationOptionsDto } from '../paginate';
 import { DepartmentsRepository } from '../departments/departments.repository';
+import { paginationQueryBuilder } from '../paginate/pagination.query-builder';
 
 @Injectable()
 export class UsersService {
@@ -76,18 +73,14 @@ export class UsersService {
     options: PaginationOptionsDto,
     search?: string,
   ): Promise<Pagination<Users>> {
-    const queryBuilder = this.usersRepository.createQueryBuilder('users');
-    if (search) {
-      queryBuilder.where(
-        '(LOWER(users.email) LIKE LOWER(:search) OR LOWER(users.name) LIKE LOWER(:search))',
-        { search: `%${search}%` },
-      );
-    }
-    queryBuilder
-      .skip((options.page - 1) * options.limit)
-      .take(options.limit)
-      .leftJoinAndSelect('users.department', 'department')
-      .orderBy('users.created', 'DESC');
+    const queryBuilder = paginationQueryBuilder(
+      'users',
+      this.usersRepository,
+      options,
+      { field: 'created', order: OrderEnum.DESC },
+      { fields: ['email', 'name', 'description'], search },
+    );
+    queryBuilder.leftJoinAndSelect('users.department', 'department');
     const [results, total] = await queryBuilder.getManyAndCount();
     return new Pagination<Users>({
       results,
