@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersRepository } from './repositories/users.repository';
 import { Users } from './entities/users.entity';
@@ -6,7 +10,7 @@ import { FillUserDataDto } from './dto/fill-user-data.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { OrderEnum, Pagination, PaginationOptionsDto } from '../paginate';
 import { DepartmentsRepository } from '../departments/departments.repository';
-import { paginationQueryBuilder } from '../paginate/pagination.query-builder';
+import { paginate, paginationQueryBuilder } from '../paginate/pagination.query-builder';
 
 @Injectable()
 export class UsersService {
@@ -81,12 +85,6 @@ export class UsersService {
       { fields: ['email', 'name', 'description'], search },
     );
     queryBuilder.leftJoinAndSelect('users.department', 'department');
-    const [results, total] = await queryBuilder.getManyAndCount();
-    return new Pagination<Users>({
-      results,
-      total,
-      page: options.page,
-      limit: options.limit,
-    });
+    return paginate(queryBuilder, options);
   }
 }

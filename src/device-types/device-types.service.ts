@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
 import { DeviceTypesDto } from './dto/device-types.dto';
 import { DeviceTypesRepository } from './device-types.repository';
 import { DeviceTypes } from './device-types.entity';
-import { DeviceTypesPaginationConfig } from './device-types.pagination-config';
+import { OrderEnum, Pagination, PaginationOptionsDto } from '../paginate';
+import { paginate, paginationQueryBuilder } from '../paginate/pagination.query-builder';
 
 @Injectable()
 export class DeviceTypesService {
@@ -42,11 +42,17 @@ export class DeviceTypesService {
     return deviceType;
   }
 
-  getAllDeviceTypes(query: PaginateQuery): Promise<Paginated<DeviceTypes>> {
-    return paginate(
-      query,
+  async getAllDeviceTypes(
+    options: PaginationOptionsDto,
+    search?: string,
+  ): Promise<Pagination<DeviceTypes>> {
+    const queryBuilder = paginationQueryBuilder(
+      'device_types',
       this.deviceTypesRepository,
-      DeviceTypesPaginationConfig,
+      options,
+      { field: 'created', order: OrderEnum.DESC },
+      { fields: ['deviceType', 'title', 'description'], search },
     );
+    return paginate(queryBuilder, options);
   }
 }

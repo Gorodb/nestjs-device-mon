@@ -6,7 +6,7 @@ import {
   Logger,
   Param,
   Post,
-  Put,
+  Put, Query,
 } from '@nestjs/common';
 import { DepartmentsService } from './departments.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
@@ -14,7 +14,7 @@ import { Departments } from './departments.entity';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { Roles } from '../guards/roles.guard';
 import { UsersRoles } from '../users/enums/users-roles.enum';
-import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
+import { Pagination, PaginationOptionsDto } from '../paginate';
 
 @Controller('departments')
 export class DepartmentsController {
@@ -46,8 +46,11 @@ export class DepartmentsController {
   }
 
   @Get()
-  getAll(@Paginate() query: PaginateQuery): Promise<Paginated<Departments>> {
-    return this.departmentService.getDepartments(query);
+  getAll(
+    @Query() paginationOptions: PaginationOptionsDto,
+    @Query('search') search: string,
+  ): Promise<Pagination<Departments>> {
+    return this.departmentService.getDepartments(paginationOptions, search);
   }
 
   @Get('/:id')

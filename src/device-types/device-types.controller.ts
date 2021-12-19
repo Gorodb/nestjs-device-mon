@@ -6,19 +6,20 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { Roles } from '../guards/roles.guard';
 import { UsersRoles } from '../users/enums/users-roles.enum';
 import { DeviceTypesDto } from './dto/device-types.dto';
 import { DeviceTypes } from './device-types.entity';
 import { DeviceTypesService } from './device-types.service';
-import { Paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
+import { Pagination, PaginationOptionsDto } from '../paginate';
 
 @Controller('device_types')
 export class DeviceTypesController {
   constructor(private readonly deviceTypesService: DeviceTypesService) {}
 
-  @Post('')
+  @Post()
   @Roles(UsersRoles.ADMIN)
   create(@Body() deviceTypesDto: DeviceTypesDto): Promise<DeviceTypes> {
     return this.deviceTypesService.createDeviceType(deviceTypesDto);
@@ -45,8 +46,11 @@ export class DeviceTypesController {
     return this.deviceTypesService.getDeviceTypeById(id);
   }
 
-  @Get('')
-  getAll(@Paginate() query: PaginateQuery): Promise<Paginated<DeviceTypes>> {
-    return this.deviceTypesService.getAllDeviceTypes(query);
+  @Get()
+  getAll(
+    @Query() paginationOptions: PaginationOptionsDto,
+    @Query('search') search: string,
+  ): Promise<Pagination<DeviceTypes>> {
+    return this.deviceTypesService.getAllDeviceTypes(paginationOptions, search);
   }
 }

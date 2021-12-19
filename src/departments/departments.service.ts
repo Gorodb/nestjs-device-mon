@@ -4,8 +4,8 @@ import { DepartmentsRepository } from './departments.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Departments } from './departments.entity';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
-import { paginate, Paginated, PaginateQuery } from 'nestjs-paginate';
-import { DepartmentsPaginationConfig } from './departments.pagination-config';
+import { paginate, paginationQueryBuilder } from '../paginate/pagination.query-builder';
+import { OrderEnum, Pagination, PaginationOptionsDto } from '../paginate';
 
 @Injectable()
 export class DepartmentsService {
@@ -14,12 +14,18 @@ export class DepartmentsService {
     private readonly departmentRepository: DepartmentsRepository,
   ) {}
 
-  getDepartments(query: PaginateQuery): Promise<Paginated<Departments>> {
-    return paginate(
-      query,
+  async getDepartments(
+    options: PaginationOptionsDto,
+    search?: string,
+  ): Promise<Pagination<Departments>> {
+    const queryBuilder = paginationQueryBuilder(
+      'departments',
       this.departmentRepository,
-      DepartmentsPaginationConfig,
+      options,
+      { field: 'created', order: OrderEnum.DESC },
+      { fields: ['name', 'description'], search },
     );
+    return paginate(queryBuilder, options);
   }
 
   async getDepartmentById(id: string): Promise<Departments> {

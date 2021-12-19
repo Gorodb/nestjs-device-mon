@@ -5,7 +5,7 @@ import { DeviceTypesDto } from './dto/device-types.dto';
 
 @EntityRepository(DeviceTypes)
 export class DeviceTypesRepository extends Repository<DeviceTypes> {
-  private logger = new Logger('DepartmentRepository', true);
+  private logger = new Logger('Device types repository', true);
 
   async createDeviceType(deviceTypesDro: DeviceTypesDto): Promise<DeviceTypes> {
     const deviceType = this.create(deviceTypesDro);
