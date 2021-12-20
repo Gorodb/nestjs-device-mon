@@ -4,7 +4,10 @@ import { DeviceTypesDto } from './dto/device-types.dto';
 import { DeviceTypesRepository } from './device-types.repository';
 import { DeviceTypes } from './device-types.entity';
 import { OrderEnum, Pagination, PaginationOptionsDto } from '../paginate';
-import { paginate, paginationQueryBuilder } from '../paginate/pagination.query-builder';
+import {
+  paginate,
+  paginationQueryBuilder,
+} from '../paginate/pagination.query-builder';
 
 @Injectable()
 export class DeviceTypesService {

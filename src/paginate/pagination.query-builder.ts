@@ -1,11 +1,9 @@
-import { QueryBuilder, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import {
   PaginationOptionsDto,
   PaginationOrderOptionsDto,
 } from './pagination.options.dto';
-import { PaginationResultInterface } from './pagination.results.interface';
 import { Pagination } from './pagination';
-import { DeviceTypes } from '../device-types/device-types.entity';
 
 export const paginationQueryBuilder = (
   alias: string,
@@ -48,22 +46,3 @@ export const paginate = async <T>(
     ...options,
   });
 };
-
-class PaginationQueryBuilder {
-  private alias: string;
-  private repository: Repository<any>;
-  public queryBuilder: any;
-  constructor(alias, repository) {
-    this.alias = alias;
-    this.repository = repository;
-    this.queryBuilder = repository.createQueryBuilder(alias);
-  }
-
-  public setSearchOptions(searchOptions?: { fields: string[]; search: string }) {
-    const { fields, search } = searchOptions;
-    const query = fields
-      .map((key) => `LOWER(${this.alias}.${key}) LIKE LOWER(:search)`)
-      .join(' OR ');
-    this.queryBuilder.where(`(${query})`, { search: `%${search}%` });
-  }
-}

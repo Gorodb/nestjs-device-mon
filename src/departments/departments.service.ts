@@ -4,7 +4,10 @@ import { DepartmentsRepository } from './departments.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Departments } from './departments.entity';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
-import { paginate, paginationQueryBuilder } from '../paginate/pagination.query-builder';
+import {
+  paginate,
+  paginationQueryBuilder,
+} from '../paginate/pagination.query-builder';
 import { OrderEnum, Pagination, PaginationOptionsDto } from '../paginate';
 
 @Injectable()

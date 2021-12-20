@@ -16,9 +16,11 @@ import { FileElementResponseDto } from '../../files/dto/file-element-response.dt
 @Entity()
 export class Users extends BaseEntity {
   @OneToMany(() => PinCodes, (pinCode: PinCodes) => pinCode.user)
-  @OneToMany(() => Devices, (device: Devices) => device.owner)
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @OneToMany(() => Devices, (device: Devices) => device.owner)
+  owner: string[];
 
   @Column({
     unique: true,

@@ -2,25 +2,23 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Departments } from '../departments/departments.entity';
 import { Users } from '../users/entities/users.entity';
 import { DeviceTypes } from '../device-types/device-types.entity';
+import { BaseEntity } from '../base-entity/base-entity';
 
 @Entity()
-export class Devices {
+export class Devices extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
   name: string;
 
-  @Column({ type: 'uuid', default: null })
-  @ManyToOne(() => Users, (user) => user.id)
+  @ManyToOne(() => Users, (user) => user.id, { eager: true })
   owner: Users;
 
-  @Column()
-  @ManyToOne(() => Users, (user) => user.id)
-  updatedByUser: string;
+  @ManyToOne(() => Users, (user) => user.id, { eager: true })
+  updatedByUser: Users;
 
-  @Column({ type: 'uuid', default: null })
-  @ManyToOne(() => DeviceTypes, (deviceType) => deviceType.id)
+  @ManyToOne(() => DeviceTypes, (deviceType) => deviceType.id, { eager: true })
   deviceType: DeviceTypes;
 
   @Column()
@@ -29,13 +27,12 @@ export class Devices {
   @Column()
   defaultLocation: string;
 
-  @Column({ type: 'uuid', default: null })
-  @ManyToOne(() => Departments, (department) => department.id)
+  @ManyToOne(() => Departments, (department) => department.id, { eager: true })
   department: Departments;
 
-  @Column()
+  @Column({ nullable: true, default: null })
   currentLocation: string;
 
-  @Column()
+  @Column({ nullable: true, default: null })
   charge: string;
 }
