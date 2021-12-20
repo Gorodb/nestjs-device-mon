@@ -73,11 +73,7 @@ export class DevicesService {
   private addJoinDependencies(queryBuilder) {
     queryBuilder.leftJoinAndSelect('devices.department', 'departments');
     queryBuilder.leftJoinAndSelect('devices.deviceType', 'device_types');
-    queryBuilder.leftJoinAndSelect(
-      'devices.owner',
-      'owner',
-      'owner.id = devices.owner',
-    );
+    queryBuilder.leftJoinAndSelect('devices.owner', 'owner');
     queryBuilder.leftJoinAndSelect('devices.updatedByUser', 'users');
     return queryBuilder;
   }
