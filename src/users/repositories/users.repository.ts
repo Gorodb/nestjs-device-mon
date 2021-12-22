@@ -13,7 +13,7 @@ export class UsersRepository extends Repository<Users> {
   constructor(private readonly jwtService: JwtService) {
     super();
   }
-  private logger = new Logger('DepartmentRepository', true);
+  private logger = new Logger('Users repository', true);
 
   async findUserByEmail(email: string): Promise<Users> {
     const user = await this.findOne({ email });

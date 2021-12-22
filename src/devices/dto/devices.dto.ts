@@ -13,9 +13,9 @@ export class DevicesDto {
 
   @IsOptional()
   @IsUUID(4, {
-    message: 'Обновивший устройство пользователь должно быть валидным UUID',
+    message: 'Взявший устройство пользователь должен быть валидным UUID',
   })
-  updatedByUser: Users;
+  heldByUser: Users;
 
   @IsUUID(4, { message: 'Тип устройства должен быть валидным UUID' })
   deviceType: DeviceTypes;

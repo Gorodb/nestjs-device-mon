@@ -16,7 +16,7 @@ export class Devices extends BaseEntity {
   owner: Users;
 
   @ManyToOne(() => Users, (user) => user.id, { eager: true })
-  updatedByUser: Users;
+  heldByUser: Users;
 
   @ManyToOne(() => DeviceTypes, (deviceType) => deviceType.id, { eager: true })
   deviceType: DeviceTypes;

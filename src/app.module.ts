@@ -8,6 +8,7 @@ import { DevicesModule } from './devices/devices.module';
 import { DeviceTypesModule } from './device-types/device-types.module';
 import { MailModule } from './mail/mail.module';
 import { FilesModule } from './files/files.module';
+import { DeviceHoldersModule } from './device-holders/device-holders.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { FilesModule } from './files/files.module';
     DeviceTypesModule,
     MailModule,
     FilesModule,
+    DeviceHoldersModule,
   ],
   controllers: [],
   providers: [],

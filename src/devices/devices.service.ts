@@ -12,6 +12,7 @@ import {
   paginate,
   paginationQueryBuilder,
 } from '../paginate/pagination.query-builder';
+import { Users } from '../users/entities/users.entity';
 
 @Injectable()
 export class DevicesService {
@@ -70,11 +71,14 @@ export class DevicesService {
     return paginate(queryBuilder, options);
   }
 
-  private addJoinDependencies(queryBuilder) {
+  private addJoinDependencies(queryBuilder): void {
     queryBuilder.leftJoinAndSelect('devices.department', 'departments');
     queryBuilder.leftJoinAndSelect('devices.deviceType', 'device_types');
     queryBuilder.leftJoinAndSelect('devices.owner', 'owner');
-    queryBuilder.leftJoinAndSelect('devices.updatedByUser', 'users');
-    return queryBuilder;
+    queryBuilder.leftJoinAndSelect('devices.heldByUser', 'users');
+  }
+
+  async takeDevice(id: string, user: Users): Promise<{ success: boolean }> {
+    return { success: true };
   }
 }
