@@ -7,7 +7,7 @@ import { TransformInterceptor } from './transform.interceptor';
 
 async function bootstrap() {
   const logger = new Logger();
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   const configService = app.get(ConfigService);
   app.setGlobalPrefix('api/v1');
   app.useGlobalPipes(

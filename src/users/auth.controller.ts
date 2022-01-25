@@ -6,7 +6,6 @@ import { PinCodesDto } from './dto/pin-codes.dto';
 import { GetJwtToken, GetUser } from './users.decorator';
 import { SendCodeDto } from './dto/send-code.dto';
 import { Users } from './entities/users.entity';
-import { FillUserDataDto } from './dto/fill-user-data.dto';
 import { Roles } from '../guards/roles.guard';
 import { UsersRoles } from './enums/users-roles.enum';
 
