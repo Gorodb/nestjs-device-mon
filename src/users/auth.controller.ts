@@ -52,9 +52,14 @@ export class AuthController {
   @Roles(UsersRoles.USER)
   @Post('/send_code')
   forgotPassword(
-    @GetJwtToken() token: string,
     @Body() sendCodeDto: SendCodeDto,
   ): Promise<{ success: boolean }> {
-    return this.authService.resendCode(sendCodeDto.action, token);
+    return this.authService.resendCode(sendCodeDto);
+  }
+
+  @Roles(UsersRoles.USER)
+  @Post('/user_info')
+  userInfo(@GetUser() user: Users): Users {
+    return user;
   }
 }

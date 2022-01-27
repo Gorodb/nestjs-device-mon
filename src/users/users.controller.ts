@@ -21,7 +21,9 @@ import { Pagination, PaginationOptionsDto } from '../paginate';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {
+    this.usersService.createAdminUser();
+  }
 
   @Roles(UsersRoles.USER)
   @Patch('/update_user')

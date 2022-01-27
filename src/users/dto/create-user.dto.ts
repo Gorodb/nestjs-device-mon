@@ -39,5 +39,5 @@ export class CreateUserDto extends SignUpCredentialsDto {
     { message: 'Логотип должен быть валидным json-ом' },
   )
   @IsObject({ message: 'Логотип должен быть валидным json-ом' })
-  logo: FileElementResponseDto;
+  logo?: FileElementResponseDto;
 }

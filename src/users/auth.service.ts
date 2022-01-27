@@ -17,6 +17,7 @@ import { PinCodesDto } from './dto/pin-codes.dto';
 import { TokenTypes } from './enums/token-types.enum';
 import { Users } from './entities/users.entity';
 import { FillUserDataDto } from './dto/fill-user-data.dto';
+import { SendCodeDto } from './dto/send-code.dto';
 
 @Injectable()
 export class AuthService {
@@ -86,12 +87,11 @@ export class AuthService {
     return { ...accessToken, success: true };
   }
 
-  async resendCode(
-    action: Actions,
-    token: string,
-  ): Promise<{ success: boolean }> {
-    const user: Users = await this.usersRepository.findUserByJwtToken(token);
-    return this.createAndSendPinCode(user, action);
+  async resendCode(sendCodeDto: SendCodeDto): Promise<{ success: boolean }> {
+    const user: Users = await this.usersRepository.findUserByEmail(
+      sendCodeDto.email,
+    );
+    return this.createAndSendPinCode(user, sendCodeDto.action);
   }
 
   private async createAndSendPinCode(

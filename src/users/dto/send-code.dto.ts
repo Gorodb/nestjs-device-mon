@@ -7,4 +7,5 @@ export class SendCodeDto {
     message: `Значение должно быть одним из: ${enumToString(Actions)}`,
   })
   action: Actions;
+  email: string;
 }

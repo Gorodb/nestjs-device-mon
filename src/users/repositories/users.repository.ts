@@ -51,7 +51,7 @@ export class UsersRepository extends Repository<Users> {
     const hashedPassword = await this.hashPassword(password, email);
     const user = this.create({
       ...createUserDto,
-      department: department,
+      department,
       password: hashedPassword,
       verified: true,
     });

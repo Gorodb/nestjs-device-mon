@@ -16,7 +16,9 @@ export const GetUser = createParamDecorator(
 export const GetJwtToken = createParamDecorator(
   (_data, context: ExecutionContext): JwtPayload => {
     const req = context.switchToHttp().getRequest();
-    const token = req.headers.access_token;
+    const token = req.headers.access_token
+      ? req.headers.access_token
+      : req.headers.authorization;
     if (!token) {
       throw new ForbiddenException('Передан некорректный токен');
     }

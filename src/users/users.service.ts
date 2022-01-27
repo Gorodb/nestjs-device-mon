@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersRepository } from './repositories/users.repository';
 import { Users } from './entities/users.entity';
@@ -11,6 +7,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { OrderEnum, Pagination, PaginationOptionsDto } from '../paginate';
 import { DepartmentsRepository } from '../departments/departments.repository';
 import { paginate, paginationQueryBuilder } from '../paginate/pagination.query-builder';
+import { UsersRoles } from './enums/users-roles.enum';
+import { CreateDepartmentDto } from '../departments/dto/create-department.dto';
 
 @Injectable()
 export class UsersService {
@@ -27,6 +25,32 @@ export class UsersService {
   ): Promise<Users> {
     await this.usersRepository.update(user.id, fillUserDataDto);
     return this.usersRepository.findOne(user.id);
+  }
+
+  async createAdminUser(): Promise<void> {
+    const adminUser = await this.usersRepository.findOne({
+      email: 'admin@admin.ru',
+    });
+    if (!adminUser) {
+      let department = (await this.departmentsRepository.find())[0];
+      if (!department) {
+        const newDepartment: CreateDepartmentDto = {
+          name: 'wink',
+          description: 'Устройства в московском офисе направления wink',
+        };
+        department = await this.departmentsRepository.createDepartment(
+          newDepartment,
+        );
+      }
+      const user: CreateUserDto = {
+        department,
+        password: 'PasSw0rdRestream!Forever',
+        role: UsersRoles.ADMIN,
+        name: 'Admin',
+        email: 'admin@admin.ru',
+      };
+      await this.usersRepository.createUserByAdmin(user, department);
+    }
   }
 
   async createUser(createUserDataDTO: CreateUserDto): Promise<Users> {
