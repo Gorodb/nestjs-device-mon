@@ -12,10 +12,18 @@ export class Devices extends BaseEntity {
   @Column()
   name: string;
 
-  @ManyToOne(() => Users, (user) => user.id, { eager: true })
+  @ManyToOne(() => Users, (user) => user.id, {
+    eager: true,
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
   owner: Users;
 
-  @ManyToOne(() => Users, (user) => user.id, { eager: true })
+  @ManyToOne(() => Users, (user) => user.id, {
+    eager: true,
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
   heldByUser: Users;
 
   @ManyToOne(() => DeviceTypes, (deviceType) => deviceType.id, { eager: true })

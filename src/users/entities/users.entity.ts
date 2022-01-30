@@ -19,7 +19,10 @@ export class Users extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToMany(() => Devices, (device: Devices) => device.owner)
+  @OneToMany(() => Devices, (device: Devices) => device.owner, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
   owner: string[];
 
   @Column({
@@ -48,7 +51,10 @@ export class Users extends BaseEntity {
   @Column({ default: null })
   description: string;
 
-  @ManyToOne(() => Departments, (department) => department.id, { eager: true, nullable: true })
+  @ManyToOne(() => Departments, (department) => department.id, {
+    eager: true,
+    nullable: true,
+  })
   department: Departments;
 
   @Column({ default: null, type: 'json' })

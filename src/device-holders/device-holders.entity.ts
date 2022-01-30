@@ -8,12 +8,21 @@ export class DeviceHolders extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Users, (user) => user.id, { eager: true })
+  @ManyToOne(() => Users, (user) => user.id, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   currentUser: Users;
 
-  @ManyToOne(() => Users, (user) => user.id, { eager: true })
+  @ManyToOne(() => Users, (user) => user.id, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   previousUser: Users;
 
-  @ManyToOne(() => Devices, (device) => device.id, { eager: true })
+  @ManyToOne(() => Devices, (device) => device.id, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   device: Devices;
 }
