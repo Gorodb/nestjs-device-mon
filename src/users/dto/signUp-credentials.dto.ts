@@ -9,10 +9,10 @@ export class SignUpCredentialsDto {
   email: string;
 
   @IsString()
-  @MinLength(6)
-  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-    message: 'Введенный пароль слишком слабый.',
-  })
+  @MinLength(6, { message: 'Пароль должен содержать больше 6 символов' })
+  // @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+  //   message: 'Введенный пароль слишком слабый.',
+  // })
   password: string;
 
   @IsUUID('all', { message: 'Id отдела должен быть UID' })
