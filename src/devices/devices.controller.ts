@@ -49,7 +49,8 @@ export class DevicesController {
   getAllDevices(
     @Query() paginationOptions: PaginationOptionsDto,
     @Query('search') search: string,
+    @Query('department') department: string,
   ): Promise<Pagination<Devices>> {
-    return this.devicesService.getAllDevices(paginationOptions, search);
+    return this.devicesService.getAllDevices(paginationOptions, search, department);
   }
 }

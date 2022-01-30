@@ -59,6 +59,7 @@ export class DevicesService {
   async getAllDevices(
     options: PaginationOptionsDto,
     search?: string,
+    department?: string
   ): Promise<Pagination<Devices>> {
     const queryBuilder = paginationQueryBuilder(
       'devices',
@@ -68,6 +69,9 @@ export class DevicesService {
       { fields: ['name', 'osName'], search },
     );
     this.addJoinDependencies(queryBuilder);
+    if (department) {
+      queryBuilder.where({ department });
+    }
     return paginate(queryBuilder, options);
   }
 

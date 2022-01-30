@@ -48,7 +48,7 @@ export class Users extends BaseEntity {
   @Column({ default: null })
   description: string;
 
-  @ManyToOne(() => Departments, (department) => department.id, { eager: true })
+  @ManyToOne(() => Departments, (department) => department.id, { eager: true, nullable: true })
   department: Departments;
 
   @Column({ default: null, type: 'json' })

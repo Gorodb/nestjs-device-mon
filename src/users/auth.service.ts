@@ -16,7 +16,6 @@ import { MailService } from '../mail/mail.service';
 import { PinCodesDto } from './dto/pin-codes.dto';
 import { TokenTypes } from './enums/token-types.enum';
 import { Users } from './entities/users.entity';
-import { FillUserDataDto } from './dto/fill-user-data.dto';
 import { SendCodeDto } from './dto/send-code.dto';
 
 @Injectable()
