@@ -6,7 +6,10 @@ import { FillUserDataDto } from './dto/fill-user-data.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { OrderEnum, Pagination, PaginationOptionsDto } from '../paginate';
 import { DepartmentsRepository } from '../departments/departments.repository';
-import { paginate, paginationQueryBuilder } from '../paginate/pagination.query-builder';
+import {
+  paginate,
+  paginationQueryBuilder,
+} from '../paginate/pagination.query-builder';
 import { UsersRoles } from './enums/users-roles.enum';
 import { CreateDepartmentDto } from '../departments/dto/create-department.dto';
 

@@ -1,5 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   UnauthorizedException,
@@ -32,8 +33,20 @@ export class AuthService {
   async signUp(
     signUpCredentialsDto: SignUpCredentialsDto,
   ): Promise<{ success: boolean; accessToken?: string }> {
-    const user = await this.usersRepository.createUser(signUpCredentialsDto);
-    return this.createAndSendPinCode(user, Actions.REGISTRATION);
+    const existingUser = await this.usersRepository.findOne({
+      email: signUpCredentialsDto.email,
+    });
+    const isVerified = existingUser.verified;
+    if (!existingUser) {
+      const user = await this.usersRepository.createUser(signUpCredentialsDto);
+      return this.createAndSendPinCode(user, Actions.REGISTRATION);
+    }
+    if (existingUser && !isVerified) {
+      return this.createAndSendPinCode(existingUser, Actions.REGISTRATION);
+    }
+    throw new BadRequestException(
+      'Не удалось зарегистрировать пользователя, проверьте логин и пароль',
+    );
   }
 
   async signIn(
