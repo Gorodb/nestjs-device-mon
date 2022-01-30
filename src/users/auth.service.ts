@@ -83,11 +83,11 @@ export class AuthService {
   async validateCode(
     pinCodesDto: PinCodesDto,
     token: string,
-    user: Users,
   ): Promise<{ success: true; accessToken: string }> {
     const encodedToken: JwtPayload = this.jwtService.verify(token);
+    const user = await this.usersRepository.findUserByEmail(encodedToken.email);
     if (!user || encodedToken.type !== TokenTypes.RESTRICTED) {
-      throw new ForbiddenException('Токен не действителен');
+      throw new ForbiddenException('Код не действителен');
     }
     const pinCode = await this.pinCodesRepository.getPinCode(
       pinCodesDto,

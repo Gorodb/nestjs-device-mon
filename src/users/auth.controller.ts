@@ -30,10 +30,9 @@ export class AuthController {
   @Post('/validate')
   validate(
     @GetJwtToken() token: string,
-    @GetUser() user: Users,
     @Body() pinCodesDto: PinCodesDto,
   ): Promise<{ success: boolean; accessToken?: string }> {
-    return this.authService.validateCode(pinCodesDto, token, user);
+    return this.authService.validateCode(pinCodesDto, token);
   }
 
   @Post('/validate_forgot_password_code')
