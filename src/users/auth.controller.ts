@@ -49,7 +49,6 @@ export class AuthController {
     );
   }
 
-  @Roles(UsersRoles.USER)
   @Post('/send_code')
   forgotPassword(
     @Body() sendCodeDto: SendCodeDto,

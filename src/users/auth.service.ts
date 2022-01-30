@@ -100,6 +100,7 @@ export class AuthService {
   }
 
   async resendCode(sendCodeDto: SendCodeDto): Promise<{ success: boolean }> {
+    console.log(sendCodeDto);
     const user: Users = await this.usersRepository.findUserByEmail(
       sendCodeDto.email,
     );
