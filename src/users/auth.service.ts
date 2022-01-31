@@ -36,12 +36,10 @@ export class AuthService {
     const existingUser = await this.usersRepository.findOne({
       email: signUpCredentialsDto.email,
     });
-    const isVerified = existingUser.verified;
     if (!existingUser) {
       const user = await this.usersRepository.createUser(signUpCredentialsDto);
       return this.createAndSendPinCode(user, Actions.REGISTRATION);
-    }
-    if (existingUser && !isVerified) {
+    } else if (existingUser && !existingUser.verified) {
       return this.createAndSendPinCode(existingUser, Actions.REGISTRATION);
     }
     throw new BadRequestException(
