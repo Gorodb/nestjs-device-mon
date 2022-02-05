@@ -43,4 +43,7 @@ export class Devices extends BaseEntity {
 
   @Column({ nullable: true, default: null })
   charge: string;
+
+  @Column({ nullable: true, default: null })
+  inventoryNumber: string;
 }

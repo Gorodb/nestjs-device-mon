@@ -59,7 +59,7 @@ export class DevicesService {
   async getAllDevices(
     options: PaginationOptionsDto,
     search?: string,
-    department?: string
+    department?: string,
   ): Promise<Pagination<Devices>> {
     const queryBuilder = paginationQueryBuilder(
       'devices',
@@ -70,7 +70,7 @@ export class DevicesService {
     );
     this.addJoinDependencies(queryBuilder);
     if (department) {
-      queryBuilder.where({ department });
+      queryBuilder.andWhere({ department });
     }
     return paginate(queryBuilder, options);
   }
@@ -80,9 +80,5 @@ export class DevicesService {
     queryBuilder.leftJoinAndSelect('devices.deviceType', 'device_types');
     queryBuilder.leftJoinAndSelect('devices.owner', 'owner');
     queryBuilder.leftJoinAndSelect('devices.heldByUser', 'users');
-  }
-
-  async takeDevice(id: string, user: Users): Promise<{ success: boolean }> {
-    return { success: true };
   }
 }

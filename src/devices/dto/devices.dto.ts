@@ -40,4 +40,8 @@ export class DevicesDto {
   @IsOptional()
   @IsString({ message: 'Уровень заряда устройства должно быть строковым' })
   charge: string;
+
+  @IsOptional()
+  @IsString({ message: 'Инвентаризационный номер должен быть строковым' })
+  inventoryNumber: string;
 }

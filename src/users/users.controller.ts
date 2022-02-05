@@ -8,7 +8,6 @@ import {
   Patch,
   Post,
   Put,
-  ValidationPipe,
 } from '@nestjs/common';
 import { Roles } from '../guards/roles.guard';
 import { UsersRoles } from './enums/users-roles.enum';
@@ -66,7 +65,8 @@ export class UsersController {
   getAllUsers(
     @Query() paginationOptions: PaginationOptionsDto,
     @Query('search') search: string,
+    @Query('department') department: string,
   ): Promise<Pagination<Users>> {
-    return this.usersService.getAllUsers(paginationOptions, search);
+    return this.usersService.getAllUsers(paginationOptions, search, department);
   }
 }
