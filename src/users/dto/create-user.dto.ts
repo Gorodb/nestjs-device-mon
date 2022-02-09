@@ -1,19 +1,20 @@
 import {
   IsEnum,
-  IsInstance,
-  IsJSON,
   IsNotEmptyObject,
   IsObject,
   IsOptional,
-  IsString,
+  IsString, IsUUID,
   Length,
+  Matches,
+  MinLength,
 } from 'class-validator';
 import { UsersRoles } from '../enums/users-roles.enum';
 import { enumToString } from '../../helpers/enum-helper';
 import { SignUpCredentialsDto } from './signUp-credentials.dto';
 import { FileElementResponseDto } from '../../files/dto/file-element-response.dto';
+import { Departments } from '../../departments/departments.entity';
 
-export class CreateUserDto extends SignUpCredentialsDto {
+export class CreateUserDto {
   @IsOptional()
   @IsEnum(UsersRoles, {
     message: `Значение должно быть одним из ${enumToString(UsersRoles)}`,
@@ -40,4 +41,19 @@ export class CreateUserDto extends SignUpCredentialsDto {
   )
   @IsObject({ message: 'Логотип должен быть валидным json-ом' })
   logo?: FileElementResponseDto;
+
+  @IsString()
+  @Matches(/\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/, {
+    message: 'Введите валидный email',
+  })
+  email: string;
+
+  @IsOptional()
+  @IsString()
+  @MinLength(6, { message: 'Пароль должен содержать больше 6 символов' })
+  password?: string;
+
+  @IsUUID('all', { message: 'Id отдела должен быть UID' })
+  @IsString({ message: 'Id отдела должен быть UID' })
+  department: Departments;
 }
