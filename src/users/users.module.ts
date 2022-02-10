@@ -12,11 +12,13 @@ import { MailModule } from '../mail/mail.module';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { DepartmentsRepository } from '../departments/departments.repository';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
     MailModule,
     ConfigModule,
+    ScheduleModule.forRoot(),
     TypeOrmModule.forFeature([
       UsersRepository,
       PinCodesRepository,

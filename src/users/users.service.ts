@@ -1,9 +1,13 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
+import { readdir, remove } from 'fs-extra';
+import { path } from 'app-root-path';
 import { UsersRepository } from './repositories/users.repository';
 import { Users } from './entities/users.entity';
 import { FillUserDataDto } from './dto/fill-user-data.dto';
@@ -25,6 +29,23 @@ export class UsersService {
     @InjectRepository(DepartmentsRepository)
     private readonly departmentsRepository: DepartmentsRepository,
   ) {}
+  private readonly logger = new Logger(UsersService.name);
+
+  @Cron(CronExpression.EVERY_DAY_AT_3AM)
+  async handleCron() {
+    const uploadPath = `${path}/uploads/logos`;
+    const logos = await readdir(uploadPath);
+    for (const logo of logos) {
+      const user = await this.usersRepository
+        .createQueryBuilder()
+        .where('logo::jsonb @> :logo', { logo: { name: logo } })
+        .getOne();
+      if (!user) {
+        this.logger.log('info', `Удаляем неиспользуемое изображение: ${logo}`);
+        await remove(`${uploadPath}/${logo}`);
+      }
+    }
+  }
 
   async fillUserData(
     fillUserDataDto: FillUserDataDto,
