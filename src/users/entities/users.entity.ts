@@ -38,6 +38,9 @@ export class Users extends BaseEntity {
   @Column({ length: 100, default: null })
   name: string;
 
+  @Column({ length: 100, default: '' })
+  location: string;
+
   @Column({
     type: 'enum',
     enum: UsersRoles,

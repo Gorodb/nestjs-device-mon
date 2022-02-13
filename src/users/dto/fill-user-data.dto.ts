@@ -1,4 +1,6 @@
-import { IsOptional, IsString, Length } from 'class-validator';
+import { IsNotEmptyObject, IsObject, IsOptional, IsString, IsUUID, Length, Matches } from 'class-validator';
+import { Departments } from '../../departments/departments.entity';
+import { FileElementResponseDto } from '../../files/dto/file-element-response.dto';
 
 export class FillUserDataDto {
   @IsOptional()
@@ -13,4 +15,22 @@ export class FillUserDataDto {
   @IsOptional()
   @IsString({ message: 'Неправильно введено имя' })
   name?: string;
+
+  @IsUUID('all', { message: 'Id отдела должен быть UID' })
+  @IsString({ message: 'Id отдела должен быть UID' })
+  department: Departments;
+
+  @IsOptional()
+  @IsNotEmptyObject(
+    { nullable: true },
+    { message: 'Логотип должен быть валидным json-ом' },
+  )
+  @IsObject({ message: 'Логотип должен быть валидным json-ом' })
+  logo?: FileElementResponseDto;
+
+  @IsString()
+  @Matches(/\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/, {
+    message: 'Введите валидный email',
+  })
+  email: string;
 }

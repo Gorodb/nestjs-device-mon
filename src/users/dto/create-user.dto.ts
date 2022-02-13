@@ -10,7 +10,6 @@ import {
 } from 'class-validator';
 import { UsersRoles } from '../enums/users-roles.enum';
 import { enumToString } from '../../helpers/enum-helper';
-import { SignUpCredentialsDto } from './signUp-credentials.dto';
 import { FileElementResponseDto } from '../../files/dto/file-element-response.dto';
 import { Departments } from '../../departments/departments.entity';
 
@@ -31,8 +30,12 @@ export class CreateUserDto {
   phone?: string;
 
   @IsOptional()
-  @IsString({ message: 'Неправильно введено имя' })
+  @IsString({ message: 'Ошибка при сохранении имени' })
   name?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Ошибка при сохранении местоположения' })
+  location?: string;
 
   @IsOptional()
   @IsNotEmptyObject(
