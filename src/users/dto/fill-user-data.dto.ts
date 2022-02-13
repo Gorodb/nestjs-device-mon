@@ -21,6 +21,10 @@ export class FillUserDataDto {
   department: Departments;
 
   @IsOptional()
+  @IsString({ message: 'Ошибка при сохранении местоположения' })
+  location?: string;
+
+  @IsOptional()
   @IsNotEmptyObject(
     { nullable: true },
     { message: 'Логотип должен быть валидным json-ом' },
