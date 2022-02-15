@@ -57,6 +57,7 @@ export class Users extends BaseEntity {
   @ManyToOne(() => Departments, (department) => department.id, {
     eager: true,
     nullable: true,
+    onDelete: 'SET NULL',
   })
   department: Departments;
 

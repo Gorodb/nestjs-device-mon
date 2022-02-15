@@ -14,18 +14,20 @@ import { DevicesService } from './devices.service';
 import { Roles } from '../guards/roles.guard';
 import { UsersRoles } from '../users/enums/users-roles.enum';
 import { Pagination, PaginationOptionsDto } from '../paginate';
+import { GetUser } from '../users/users.decorator';
+import { Users } from '../users/entities/users.entity';
 
 @Controller('devices')
 export class DevicesController {
   constructor(private readonly devicesService: DevicesService) {}
 
-  @Post()
+  @Post('/create')
   @Roles(UsersRoles.ADMIN)
   createDevice(@Body() deviceDto: DevicesDto): Promise<Devices> {
     return this.devicesService.createDevice(deviceDto);
   }
 
-  @Put('/:id')
+  @Put('/update/:id')
   @Roles(UsersRoles.ADMIN)
   update(
     @Param('id') id: string,
@@ -34,18 +36,18 @@ export class DevicesController {
     return this.devicesService.updateDeviceByAdmin(id, deviceDto);
   }
 
-  @Delete('/:id')
+  @Delete('/remove/:id')
   @Roles(UsersRoles.ADMIN)
   delete(@Param('id') id: string): Promise<{ success: boolean }> {
     return this.devicesService.deleteDevice(id);
   }
 
-  @Get('/:id')
+  @Get('/get/:id')
   getDeviceById(@Param('id') id: string) {
     return this.devicesService.getDeviceById(id);
   }
 
-  @Get()
+  @Get('/getAll')
   getAllDevices(
     @Query() paginationOptions: PaginationOptionsDto,
     @Query('search') search: string,
@@ -56,5 +58,11 @@ export class DevicesController {
       search,
       department,
     );
+  }
+
+  @Get('/devices_on_me')
+  @Roles(UsersRoles.USER)
+  getMyTakenDevices(@GetUser() user: Users): Promise<{ items: Devices[] }> {
+    return this.devicesService.geMyTakenDevices(user);
   }
 }

@@ -35,7 +35,11 @@ export class Devices extends BaseEntity {
   @Column()
   defaultLocation: string;
 
-  @ManyToOne(() => Departments, (department) => department.id, { eager: true })
+  @ManyToOne(() => Departments, (department) => department.id, {
+    eager: true,
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
   department: Departments;
 
   @Column({ nullable: true, default: null })

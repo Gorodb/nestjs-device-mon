@@ -56,6 +56,11 @@ export class DevicesService {
     return { success: true };
   }
 
+  async geMyTakenDevices(user: Users): Promise<{ items: Devices[] }> {
+    const devices = await this.devicesRepository.find({ heldByUser: user });
+    return { items: devices };
+  }
+
   async getAllDevices(
     options: PaginationOptionsDto,
     search?: string,
