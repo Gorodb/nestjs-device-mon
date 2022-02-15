@@ -17,6 +17,12 @@ export class DevicesDto {
   })
   heldByUser: Users;
 
+  @IsOptional()
+  @IsUUID(4, {
+    message: 'Предыдущий пользователь устройством должен быть валидным UUID',
+  })
+  previousUser: Users;
+
   @IsUUID(4, { message: 'Тип устройства должен быть валидным UUID' })
   deviceType: DeviceTypes;
 
