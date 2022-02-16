@@ -1,10 +1,15 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DevicesRepository } from '../devices/devices.repository';
 import { DeviceHoldersRepository } from './device-holders.repository';
 import { DeviceHolderDto } from './dto/device-holders.dto';
 import { Users } from '../users/entities/users.entity';
 import { DeviceHolders } from './device-holders.entity';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class DeviceHoldersService {
@@ -13,13 +18,22 @@ export class DeviceHoldersService {
     private readonly deviceHoldersRepository: DeviceHoldersRepository,
     @InjectRepository(DevicesRepository)
     private readonly devicesRepository: DevicesRepository,
-  ) {
+  ) {}
+  private events = new Subject();
+
+  addEvent(event) {
+    this.events.next(event);
+  }
+
+  sendEvents() {
+    return this.events.asObservable();
   }
 
   async takeDevice(
     deviceHolderDto: DeviceHolderDto,
     user: Users,
   ): Promise<{ success: boolean }> {
+    this.addEvent('take');
     await this.updateDeviceOnTake(deviceHolderDto, user);
     return this.deviceHoldersRepository.takeDevice(deviceHolderDto, user);
   }
@@ -27,6 +41,7 @@ export class DeviceHoldersService {
   async returnDevice(
     deviceHolderDto: DeviceHolderDto,
   ): Promise<{ success: boolean }> {
+    this.addEvent('return');
     await this.updateDeviceOnReturn(deviceHolderDto);
     return this.deviceHoldersRepository.returnDevice(deviceHolderDto);
   }
@@ -35,6 +50,7 @@ export class DeviceHoldersService {
     deviceHolderDto: DeviceHolderDto,
     user: Users,
   ): Promise<{ success: boolean }> {
+    this.addEvent('returnToPrevious');
     const holder = await this.deviceHoldersRepository.findDeviceHolder(
       deviceHolderDto,
     );
