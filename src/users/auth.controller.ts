@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpCredentialsDto } from './dto/signUp-credentials.dto';
 import { SignInCredentialsDto } from './dto/signIn-credentials.dto';
@@ -56,7 +56,7 @@ export class AuthController {
   }
 
   @Roles(UsersRoles.USER)
-  @Post('/user_info')
+  @Get('/user_info')
   userInfo(@GetUser() user: Users): Users {
     return user;
   }

@@ -85,5 +85,6 @@ export class DevicesService {
     queryBuilder.leftJoinAndSelect('devices.deviceType', 'device_types');
     queryBuilder.leftJoinAndSelect('devices.owner', 'owner');
     queryBuilder.leftJoinAndSelect('devices.heldByUser', 'users');
+    queryBuilder.leftJoinAndSelect('devices.previousUser', 'previousUser');
   }
 }
