@@ -33,9 +33,20 @@ export class DeviceHoldersService {
     deviceHolderDto: DeviceHolderDto,
     user: Users,
   ): Promise<{ success: boolean }> {
-    this.addEvent('take');
     await this.updateDeviceOnTake(deviceHolderDto, user);
-    return this.deviceHoldersRepository.takeDevice(deviceHolderDto, user);
+    const { success } = await this.deviceHoldersRepository.takeDevice(
+      deviceHolderDto,
+      user,
+    );
+    if (success) {
+      const device = await this.devicesRepository.findOne(
+        deviceHolderDto.device,
+      );
+      try {
+        this.addEvent(JSON.stringify({ device, event: 'take' }));
+      } catch {}
+    }
+    return { success };
   }
 
   async returnDevice(
@@ -43,7 +54,18 @@ export class DeviceHoldersService {
   ): Promise<{ success: boolean }> {
     this.addEvent('return');
     await this.updateDeviceOnReturn(deviceHolderDto);
-    return this.deviceHoldersRepository.returnDevice(deviceHolderDto);
+    const { success } = await this.deviceHoldersRepository.returnDevice(
+      deviceHolderDto,
+    );
+    if (success) {
+      const device = await this.devicesRepository.findOne(
+        deviceHolderDto.device,
+      );
+      try {
+        this.addEvent(JSON.stringify({ device, event: 'return' }));
+      } catch {}
+    }
+    return { success };
   }
 
   async returnToPrevious(
@@ -61,7 +83,19 @@ export class DeviceHoldersService {
       throw new ForbiddenException('Нельзя вернуть устройство самому себе');
     }
     await this.updateDeviceOnReturnToPrevious(deviceHolderDto, holder);
-    return this.deviceHoldersRepository.returnToPrevious(deviceHolderDto, user);
+    const { success } = await this.deviceHoldersRepository.returnToPrevious(
+      deviceHolderDto,
+      user,
+    );
+    if (success) {
+      const device = await this.devicesRepository.findOne(
+        deviceHolderDto.device,
+      );
+      try {
+        this.addEvent(JSON.stringify({ device, event: 'returnToPrevious' }));
+      } catch {}
+    }
+    return { success };
   }
 
   async updateDeviceOnTake(
