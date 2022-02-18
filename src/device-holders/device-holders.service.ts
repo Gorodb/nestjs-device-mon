@@ -19,6 +19,7 @@ export class DeviceHoldersService {
     @InjectRepository(DevicesRepository)
     private readonly devicesRepository: DevicesRepository,
   ) {}
+
   private events = new Subject();
 
   addEvent(event) {
