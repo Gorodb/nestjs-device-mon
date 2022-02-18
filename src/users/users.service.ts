@@ -135,7 +135,7 @@ export class UsersService {
       this.usersRepository,
       options,
       { field: 'created', order: OrderEnum.DESC },
-      { fields: ['email', 'name', 'description'], search },
+      { fields: ['email', 'name', 'description', 'id'], search },
     );
     if (department) {
       queryBuilder.andWhere({ department });
