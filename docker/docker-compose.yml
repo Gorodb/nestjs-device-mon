@@ -1,0 +1,39 @@
+version: '3.3'
+services:
+  postgres:
+    image: postgres:14.1-alpine
+    container_name: postgres-14.1-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: "device_mon"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "Restream!1"
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+  backend:
+    image: registry.restream.ru:5000/ramis-vakazov/device-mon-backend
+    container_name: device-mon-backend
+    depends_on:
+      - postgres
+    restart: always
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./.env.stage.prod:/apt/app/device-mon-backend/.env.stage.prod
+    networks:
+      - postgres
+  frontend:
+    image: registry.restream.ru:5000/ramis-vakazov/device-mon-frontend
+    container_name: device-mon-frontend
+    depends_on:
+      - backend
+    restart: always
+    ports:
+      - "4000:4000"
+networks:
+  postgres:
+    driver: bridge
