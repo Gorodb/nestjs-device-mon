@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpCredentialsDto } from './dto/signUp-credentials.dto';
 import { SignInCredentialsDto } from './dto/signIn-credentials.dto';
@@ -58,6 +58,9 @@ export class AuthController {
   @Roles(UsersRoles.USER)
   @Get('/user_info')
   userInfo(@GetUser() user: Users): Users {
+    if (!user.verified) {
+      throw new UnauthorizedException('Необходима авторизация');
+    }
     return user;
   }
 }

@@ -17,9 +17,13 @@ export const paginationQueryBuilder = (
   if (searchOptions.search) {
     const { fields, search } = searchOptions;
     const query = fields
-      .map((key) => `LOWER(${alias}.${key}::text) LIKE LOWER(:search)`)
+      .map((key) => {
+        return key !== 'id'
+          ? `LOWER(${alias}.${key}) LIKE LOWER(:search)`
+          : `${alias}.${key}::text LIKE LOWER(:search)`;
+      })
       .join(' OR ');
-    queryBuilder.where(`(${query})`, { search: `%${search}%` });
+    queryBuilder.where(`(${query})`, { search: `%${search.trim()}%` });
   }
 
   if (orderOptions) {

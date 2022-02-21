@@ -54,7 +54,7 @@ export class DeviceTypesService {
       this.deviceTypesRepository,
       options,
       { field: 'created', order: OrderEnum.DESC },
-      { fields: ['deviceType', 'title', 'description'], search },
+      { fields: ['id', 'deviceType', 'title', 'description'], search },
     );
     return paginate(queryBuilder, options);
   }

@@ -10,7 +10,7 @@ export class MailService {
     await this.mailerService.sendMail({
       to: user.email,
       subject: 'Спасибо за регистрацию!',
-      template: './confirmation',
+      template: __dirname + '/confirmation',
       context: {
         name: user.name,
         code,
@@ -22,7 +22,7 @@ export class MailService {
     await this.mailerService.sendMail({
       to: user.email,
       subject: 'Забыли пароль?',
-      template: './forgot-password',
+      template: __dirname + '/forgot-password',
       context: { code },
     });
   }

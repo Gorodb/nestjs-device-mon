@@ -24,6 +24,7 @@ services:
       - "3001:3001"
     volumes:
       - ./.env.stage.prod:/apt/app/device-mon-backend/.env.stage.prod
+      - ./uploads:/apt/app/device-mon-backend/uploads
     networks:
       - postgres
   frontend:
@@ -32,8 +33,14 @@ services:
     depends_on:
       - backend
     restart: always
+    volumes:
+      - ./.env.production:/apt/app/device-mon-frontend/.env.production
     ports:
       - "4000:4000"
+    networks:
+      - postgres
+    links:
+      - backend
 networks:
   postgres:
     driver: bridge

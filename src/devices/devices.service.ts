@@ -72,7 +72,7 @@ export class DevicesService {
       this.devicesRepository,
       options,
       { field: 'created', order: OrderEnum.DESC },
-      { fields: ['name', 'osName'], search },
+      { fields: ['id', 'name', 'osName', 'inventoryNumber'], search },
     );
     this.addJoinDependencies(queryBuilder);
     if (department) {

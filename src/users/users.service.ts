@@ -140,6 +140,7 @@ export class UsersService {
     if (department) {
       queryBuilder.andWhere({ department });
     }
+    queryBuilder.andWhere({ verified: true });
     queryBuilder.leftJoinAndSelect('users.department', 'department');
     return paginate(queryBuilder, options);
   }
