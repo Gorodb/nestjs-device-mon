@@ -29,6 +29,15 @@ export class ErrorFilter implements ExceptionFilter {
       });
     }
 
+    if (error.responseCode === 550) {
+      return response.status(status).send({
+        ...new ForbiddenException(
+          'Не удалось отправить сообщение по указанному адресу',
+        ),
+        debug: error.message,
+      });
+    }
+
     if (status === HttpStatus.UNAUTHORIZED) {
       return response.status(status).send({
         ...new UnauthorizedException(error.message),
