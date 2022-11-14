@@ -9,6 +9,7 @@ import {
   InternalServerErrorException,
   ForbiddenException,
 } from '@nestjs/common';
+import { errorsMessages } from './errors.messages';
 
 @Catch()
 export class ErrorFilter implements ExceptionFilter {
@@ -24,16 +25,14 @@ export class ErrorFilter implements ExceptionFilter {
 
     if (error.name === 'TokenExpiredError') {
       return response.status(status).send({
-        ...new ForbiddenException('Токен устарел'),
+        ...new ForbiddenException(errorsMessages.en.tokenExpiredError),
         debug: error.message,
       });
     }
 
     if (error.responseCode === 550) {
       return response.status(status).send({
-        ...new ForbiddenException(
-          'Не удалось отправить сообщение по указанному адресу',
-        ),
+        ...new ForbiddenException(errorsMessages.en.responseError),
         debug: error.message,
       });
     }
@@ -45,9 +44,10 @@ export class ErrorFilter implements ExceptionFilter {
     }
 
     if (status === HttpStatus.NOT_FOUND) {
-      return response
-        .status(status)
-        .send({ ...new NotFoundException('Не найдено'), debug: error.message });
+      return response.status(status).send({
+        ...new NotFoundException(errorsMessages.en.notFoundError),
+        debug: error.message,
+      });
     }
 
     if (error.status && error.response) {

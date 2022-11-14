@@ -31,7 +31,7 @@ export class DevicesService {
   async getDeviceById(id: string): Promise<Devices> {
     const device = await this.devicesRepository.findOne(id);
     if (!device) {
-      throw new NotFoundException(`Устройства с id ${id} не найдено`);
+      throw new NotFoundException(`Device with id ${id} was not found`);
     }
     return device;
   }
@@ -43,7 +43,7 @@ export class DevicesService {
     const device = await this.getDeviceById(id);
     const isUpdated = await this.devicesRepository.update(id, deviceDto);
     if (!isUpdated.affected) {
-      throw new ForbiddenException('Не удалось обновить устройство');
+      throw new ForbiddenException('Unable to update device');
     }
     return { ...device, ...deviceDto };
   }
@@ -51,7 +51,7 @@ export class DevicesService {
   async deleteDevice(id: string): Promise<{ success: boolean }> {
     const { affected } = await this.devicesRepository.delete(id);
     if (!affected) {
-      throw new NotFoundException(`Устройства с id ${id} не найдено`);
+      throw new NotFoundException(`Device with id ${id} was not found`);
     }
     return { success: true };
   }

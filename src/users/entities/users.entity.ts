@@ -27,7 +27,7 @@ export class Users extends BaseEntity {
 
   @Column({
     unique: true,
-    comment: 'Логин должен быть уникальным',
+    comment: 'Login should be unique',
   })
   email: string;
 

@@ -1,40 +1,41 @@
 import { IsNotEmptyObject, IsObject, IsOptional, IsString, IsUUID, Length, Matches } from 'class-validator';
 import { Departments } from '../../departments/departments.entity';
 import { FileElementResponseDto } from '../../files/dto/file-element-response.dto';
+import { createUserMessages } from './userMessages';
 
 export class FillUserDataDto {
   @IsOptional()
-  @IsString({ message: 'Описание заполнено некорректно' })
+  @IsString({ message: createUserMessages.en.description })
   description?: string;
 
   @IsOptional()
   @IsString()
-  @Length(6, 12, { message: 'Телефон должен содержать от 6 до 12 символов' })
+  @Length(6, 15, { message: createUserMessages.en.phone })
   phone?: string;
 
   @IsOptional()
-  @IsString({ message: 'Неправильно введено имя' })
+  @IsString({ message: createUserMessages.en.name })
   name?: string;
 
-  @IsUUID('all', { message: 'Id отдела должен быть UID' })
-  @IsString({ message: 'Id отдела должен быть UID' })
+  @IsUUID('all', { message: createUserMessages.en.department })
+  @IsString({ message: createUserMessages.en.department })
   department: Departments;
 
   @IsOptional()
-  @IsString({ message: 'Ошибка при сохранении местоположения' })
+  @IsString({ message: createUserMessages.en.location })
   location?: string;
 
   @IsOptional()
   @IsNotEmptyObject(
     { nullable: true },
-    { message: 'Логотип должен быть валидным json-ом' },
+    { message: createUserMessages.en.logo },
   )
-  @IsObject({ message: 'Логотип должен быть валидным json-ом' })
+  @IsObject({ message: createUserMessages.en.logo })
   logo?: FileElementResponseDto;
 
   @IsString()
   @Matches(/\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/, {
-    message: 'Введите валидный email',
+    message: createUserMessages.en.email,
   })
   email: string;
 }

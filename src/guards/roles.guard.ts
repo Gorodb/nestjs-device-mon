@@ -11,6 +11,7 @@ import { Users } from '../users/entities/users.entity';
 import { UsersRoles } from '../users/enums/users-roles.enum';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
+import { guardsMessages } from './guards.messages';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -30,7 +31,7 @@ export class RolesGuard implements CanActivate {
       return true;
     }
     if (!roles.includes(user.role)) {
-      throw new ForbiddenException('Это действие недоступно');
+      throw new ForbiddenException(guardsMessages.en.forbiddenRoleException);
     }
     return roles.includes(user.role);
   }

@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from '../jwt/jwt-payload.interface';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { Departments } from '../../departments/departments.entity';
+import { userRepositoryMessages } from './repositories.messages';
 
 @EntityRepository(Users)
 export class UsersRepository extends Repository<Users> {
@@ -18,7 +19,7 @@ export class UsersRepository extends Repository<Users> {
   async findUserByEmail(email: string): Promise<Users> {
     const user = await this.findOne({ email });
     if (!user) {
-      throw new BadRequestException('Пользователь не найден');
+      throw new BadRequestException(userRepositoryMessages.en.userNotFound);
     }
     return user;
   }
@@ -35,10 +36,10 @@ export class UsersRepository extends Repository<Users> {
     const user = this.create({ email, password: hashedPassword });
     if (!user) {
       throw new BadRequestException(
-        `Не удалось создать пользователя с email ${signUpCredentialsDto.email}`,
+        `${userRepositoryMessages.en.creatingUserByEmail} ${signUpCredentialsDto.email}`,
       );
     }
-    await this.logger.log(`Создание пользователя с email ${email}`);
+    await this.logger.log(`Creating user with email ${email}`);
     await this.save(user);
     return user;
   }
@@ -57,10 +58,12 @@ export class UsersRepository extends Repository<Users> {
     });
     if (!user) {
       throw new BadRequestException(
-        `Не удалось создать пользователя с email ${email}`,
+        `${userRepositoryMessages.en.creatingUserByEmail} ${email}`,
       );
     }
-    this.logger.log(`Создание пользователя с email ${email}`);
+    this.logger.log(
+      `${userRepositoryMessages.en.creatingUserByEmail} ${email}`,
+    );
     await this.save(user);
     return user;
   }
@@ -82,7 +85,7 @@ export class UsersRepository extends Repository<Users> {
     });
     if (!affected.affected) {
       throw new BadRequestException(
-        `Не удалось обновить пользователя с id ${user.id}`,
+        `${userRepositoryMessages.en.creatingUserById} ${user.id}`,
       );
     }
     return { ...user, ...createUserDto };
@@ -95,7 +98,7 @@ export class UsersRepository extends Repository<Users> {
   ) {
     if (withEmailCheck && (await this.findOne({ email }))) {
       throw new BadRequestException(
-        `Пользователь с email ${email} уже существует`,
+        `${userRepositoryMessages.en.userExists} ${email}`,
       );
     }
     const salt = await bcrypt.genSalt();

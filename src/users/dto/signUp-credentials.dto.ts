@@ -1,21 +1,19 @@
 import { IsString, IsUUID, Matches, MinLength } from 'class-validator';
 import { Departments } from '../../departments/departments.entity';
+import { createUserMessages } from './userMessages';
 
 export class SignUpCredentialsDto {
   @IsString()
   @Matches(/\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/, {
-    message: 'Введите валидный email',
+    message: createUserMessages.en.email,
   })
   email: string;
 
   @IsString()
-  @MinLength(6, { message: 'Пароль должен содержать больше 6 символов' })
-  // @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-  //   message: 'Введенный пароль слишком слабый.',
-  // })
+  @MinLength(6, { message: createUserMessages.en.password })
   password: string;
 
-  @IsUUID('all', { message: 'Id отдела должен быть UID' })
-  @IsString({ message: 'Id отдела должен быть UID' })
+  @IsUUID('all', { message: createUserMessages.en.department })
+  @IsString({ message: createUserMessages.en.department })
   department: Departments;
 }

@@ -10,6 +10,7 @@ import { DeviceHolderDto } from './dto/device-holders.dto';
 import { Users } from '../users/entities/users.entity';
 import { DeviceHolders } from './device-holders.entity';
 import { Subject } from 'rxjs';
+import { servicesMessages } from './dto/device-holder.messages';
 
 @Injectable()
 export class DeviceHoldersService {
@@ -78,10 +79,10 @@ export class DeviceHoldersService {
       deviceHolderDto,
     );
     if (!holder.previousUser.id) {
-      throw new ForbiddenException('Вы взяли это устройство из места хранения');
+      throw new ForbiddenException(servicesMessages.en.takeDevice);
     }
     if (user.id === holder.previousUser.id) {
-      throw new ForbiddenException('Нельзя вернуть устройство самому себе');
+      throw new ForbiddenException(servicesMessages.en.unableToReturnYourself);
     }
     await this.updateDeviceOnReturnToPrevious(deviceHolderDto, holder);
     const { success } = await this.deviceHoldersRepository.returnToPrevious(
@@ -116,7 +117,7 @@ export class DeviceHoldersService {
             heldByUser: user,
           });
     if (!affected) {
-      throw new NotFoundException(`Устройство с id ${device} не найдено`);
+      throw new NotFoundException(servicesMessages.en.notFoundDevice(device));
     }
   }
 
@@ -126,7 +127,7 @@ export class DeviceHoldersService {
       previousUser: null,
     });
     if (!affected) {
-      throw new NotFoundException(`Устройство с id ${device} не найдено`);
+      throw new NotFoundException(servicesMessages.en.notFoundDevice(device));
     }
   }
 
@@ -139,7 +140,7 @@ export class DeviceHoldersService {
       previousUser: holders.currentUser,
     });
     if (!affected) {
-      throw new NotFoundException(`Устройство с id ${device} не найдено`);
+      throw new NotFoundException(servicesMessages.en.notFoundDevice(device));
     }
   }
 }

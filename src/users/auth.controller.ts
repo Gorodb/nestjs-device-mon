@@ -1,4 +1,10 @@
-import { Body, Controller, Get, Post, UnauthorizedException } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpCredentialsDto } from './dto/signUp-credentials.dto';
 import { SignInCredentialsDto } from './dto/signIn-credentials.dto';
@@ -8,6 +14,7 @@ import { SendCodeDto } from './dto/send-code.dto';
 import { Users } from './entities/users.entity';
 import { Roles } from '../guards/roles.guard';
 import { UsersRoles } from './enums/users-roles.enum';
+import { serviceMessages } from './dto/userMessages';
 
 @Controller('auth')
 export class AuthController {
@@ -59,7 +66,7 @@ export class AuthController {
   @Get('/user_info')
   userInfo(@GetUser() user: Users): Users {
     if (!user.verified) {
-      throw new UnauthorizedException('Необходима авторизация');
+      throw new UnauthorizedException(serviceMessages.en.authRequired);
     }
     return user;
   }

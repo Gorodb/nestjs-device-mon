@@ -18,6 +18,7 @@ import { PinCodesDto } from './dto/pin-codes.dto';
 import { TokenTypes } from './enums/token-types.enum';
 import { Users } from './entities/users.entity';
 import { SendCodeDto } from './dto/send-code.dto';
+import { serviceMessages } from './dto/userMessages';
 
 @Injectable()
 export class AuthService {
@@ -42,9 +43,7 @@ export class AuthService {
     } else if (existingUser && !existingUser.verified) {
       return this.createAndSendPinCode(existingUser, Actions.REGISTRATION);
     }
-    throw new BadRequestException(
-      'Не удалось зарегистрировать пользователя, проверьте логин и пароль',
-    );
+    throw new BadRequestException(serviceMessages.en.unableToReg);
   }
 
   async signIn(
@@ -53,13 +52,13 @@ export class AuthService {
     const { email, password } = signInCredentialsDto;
     const user = await this.usersRepository.findUserByEmail(email);
     if (!user.verified) {
-      throw new UnauthorizedException('Не подтвержденная учетная запись');
+      throw new UnauthorizedException(serviceMessages.en.unconfirmedAccount);
     }
 
     if (user && (await bcrypt.compare(password, user.password))) {
       return generateAccessToken(email, this.jwtService);
     } else {
-      throw new UnauthorizedException('Не верный email или пароль.');
+      throw new UnauthorizedException(serviceMessages.en.wrongCredentials);
     }
   }
 
@@ -70,7 +69,7 @@ export class AuthService {
   ): Promise<{ success: true; accessToken: string }> {
     const encodedToken: JwtPayload = this.jwtService.verify(token);
     if (!user || encodedToken.type !== TokenTypes.NORMAL) {
-      throw new ForbiddenException('Токен не действителен');
+      throw new ForbiddenException(serviceMessages.en.invalidToken);
     }
     const code = await this.pinCodesRepository.getPinCode(pinCodesDto, user.id);
     await this.pinCodesRepository.setCodeUsed(code);
@@ -85,7 +84,7 @@ export class AuthService {
     const encodedToken: JwtPayload = this.jwtService.verify(token);
     const user = await this.usersRepository.findUserByEmail(encodedToken.email);
     if (!user || encodedToken.type !== TokenTypes.RESTRICTED) {
-      throw new ForbiddenException('Код не действителен');
+      throw new ForbiddenException(serviceMessages.en.invalidCode);
     }
     const pinCode = await this.pinCodesRepository.getPinCode(
       pinCodesDto,

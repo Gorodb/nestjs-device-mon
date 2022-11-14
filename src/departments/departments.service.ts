@@ -9,6 +9,7 @@ import {
   paginationQueryBuilder,
 } from '../paginate/pagination.query-builder';
 import { OrderEnum, Pagination, PaginationOptionsDto } from '../paginate';
+import { servicesMessages } from './dto/departments.messages';
 
 @Injectable()
 export class DepartmentsService {
@@ -34,7 +35,7 @@ export class DepartmentsService {
   async getDepartmentById(id: string): Promise<Departments> {
     const found = await this.departmentRepository.findOne({ where: { id } });
     if (!found) {
-      throw new NotFoundException(`Отдел с id '${id}' не найден.`);
+      throw new NotFoundException(servicesMessages.en.notFoundDepartment(id));
     }
     return found;
   }
@@ -61,7 +62,7 @@ export class DepartmentsService {
   async deleteDepartment(id: string): Promise<{ success: boolean }> {
     const result = await this.departmentRepository.delete({ id });
     if (result.affected === 0) {
-      throw new NotFoundException(`Отдел с id '${id}' не найден.`);
+      throw new NotFoundException(servicesMessages.en.notFoundDepartment(id));
     }
     return { success: true };
   }

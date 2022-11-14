@@ -32,7 +32,7 @@ export class DeviceTypesService {
   async deleteDeviceType(id: string): Promise<{ success: boolean }> {
     const { affected } = await this.deviceTypesRepository.delete(id);
     if (!affected) {
-      throw new NotFoundException(`Тип устройства с id ${id} не найден`);
+      throw new NotFoundException(`Device type with id ${id} not found`);
     }
     return { success: true };
   }
@@ -40,7 +40,7 @@ export class DeviceTypesService {
   async getDeviceTypeById(id: string): Promise<DeviceTypes> {
     const deviceType = await this.deviceTypesRepository.findOne(id);
     if (!deviceType) {
-      throw new NotFoundException(`Тип устройства с id ${id} не найден`);
+      throw new NotFoundException(`Device type with id ${id} not found`);
     }
     return deviceType;
   }

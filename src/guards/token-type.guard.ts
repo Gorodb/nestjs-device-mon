@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { Users } from '../users/entities/users.entity';
 import { UsersRoles } from '../users/enums/users-roles.enum';
+import { guardsMessages } from './guards.messages';
 
 export const TokenType = createParamDecorator(
   (roles: Array<UsersRoles>, ctx: ExecutionContext) => {
@@ -13,7 +14,7 @@ export const TokenType = createParamDecorator(
 
     if (!roles.includes(users.role)) {
       throw new ForbiddenException(
-        'Не достаточно прав для выполнения действия',
+        guardsMessages.en.forbiddenTokenException,
       );
     }
   },

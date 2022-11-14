@@ -35,7 +35,7 @@ export class DepartmentsController {
     @Param('id') id: string,
     @Body() updateDepartmentDto: UpdateDepartmentDto,
   ): Promise<Departments> {
-    this.logger.log(`Обновление подразделения с id: ${id}`);
+    this.logger.log(`Updated department with id: ${id}`);
     return this.departmentService.updateDepartment(id, updateDepartmentDto);
   }
 

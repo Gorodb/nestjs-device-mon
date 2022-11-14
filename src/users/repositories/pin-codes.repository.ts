@@ -7,6 +7,7 @@ import {
 import { PinCodes } from '../entities/pin-codes.entity';
 import { Actions } from '../enums/actions.enum';
 import { PinCodesDto } from '../dto/pin-codes.dto';
+import { pinCodesMessages } from './repositories.messages';
 
 @EntityRepository(PinCodes)
 export class PinCodesRepository extends Repository<PinCodes> {
@@ -18,11 +19,9 @@ export class PinCodesRepository extends Repository<PinCodes> {
       expirationDate: Date.now() + 60 * 60 * 1000,
       action,
     });
-    this.logger.log(`Создаем пин-код ${JSON.stringify(pinCode)}`);
+    this.logger.log(`Creating pin-code ${JSON.stringify(pinCode)}`);
     if (!pinCode) {
-      throw new BadRequestException(
-        'Не удалось выслать код на почту, попробуйте позже',
-      );
+      throw new BadRequestException(pinCodesMessages.en.bedRequest);
     }
     await this.save(pinCode);
     return pinCode;
@@ -40,9 +39,7 @@ export class PinCodesRepository extends Repository<PinCodes> {
       },
     });
     if (!pinCode) {
-      throw new ForbiddenException(
-        'Для данной сессии код не найден или устарел',
-      );
+      throw new ForbiddenException(pinCodesMessages.en.codeNotFound);
     }
     return pinCode;
   }

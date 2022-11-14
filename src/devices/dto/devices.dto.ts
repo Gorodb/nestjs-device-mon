@@ -2,52 +2,53 @@ import { IsString, IsOptional, IsUUID } from 'class-validator';
 import { Users } from '../../users/entities/users.entity';
 import { Departments } from '../../departments/departments.entity';
 import { DeviceTypes } from '../../device-types/device-types.entity';
+import { devicesMessages } from './devices.messages';
 
 export class DevicesDto {
-  @IsString({ message: 'Имя устройства должно быть строковым' })
+  @IsString({ message: devicesMessages.en.name })
   name: string;
 
   @IsOptional()
-  @IsUUID(4, { message: 'Владелец устройства должен быть валидным UUID' })
+  @IsUUID(4, { message: devicesMessages.en.owner })
   owner: Users;
 
   @IsOptional()
   @IsUUID(4, {
-    message: 'Взявший устройство пользователь должен быть валидным UUID',
+    message: devicesMessages.en.heldByUser,
   })
   heldByUser: Users;
 
   @IsOptional()
   @IsUUID(4, {
-    message: 'Предыдущий пользователь устройством должен быть валидным UUID',
+    message: devicesMessages.en.previousUser,
   })
   previousUser: Users;
 
-  @IsUUID(4, { message: 'Тип устройства должен быть валидным UUID' })
+  @IsUUID(4, { message: devicesMessages.en.deviceType })
   deviceType: DeviceTypes;
 
   @IsString({
-    message: 'Название операционной системы устройства должно быть строковым',
+    message: devicesMessages.en.osName,
   })
   osName: string;
 
-  @IsString({ message: 'Место хранения устройства должно быть строковым' })
+  @IsString({ message: devicesMessages.en.defaultLocation })
   defaultLocation: string;
 
-  @IsUUID(4, { message: 'Подразделение устройства должно быть валидным UUID' })
+  @IsUUID(4, { message: devicesMessages.en.department })
   department: Departments;
 
   @IsOptional()
   @IsString({
-    message: 'Текущее место хранения устройства должно быть строковым',
+    message: devicesMessages.en.currentLocation,
   })
   currentLocation: string;
 
   @IsOptional()
-  @IsString({ message: 'Уровень заряда устройства должно быть строковым' })
+  @IsString({ message: devicesMessages.en.charge })
   charge: string;
 
   @IsOptional()
-  @IsString({ message: 'Инвентаризационный номер должен быть строковым' })
+  @IsString({ message: devicesMessages.en.inventoryNumber })
   inventoryNumber: string;
 }

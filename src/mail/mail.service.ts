@@ -1,6 +1,7 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { Users } from '../users/entities/users.entity';
+import { emailMessages } from './email.messages';
 
 @Injectable()
 export class MailService {
@@ -9,7 +10,7 @@ export class MailService {
   async sendUserConfirmation(user: Users, code: number) {
     await this.mailerService.sendMail({
       to: user.email,
-      subject: 'Спасибо за регистрацию!',
+      subject: emailMessages.en.sendUserConfirmation,
       template: __dirname + '/confirmation',
       context: {
         name: user.name,
@@ -21,7 +22,7 @@ export class MailService {
   async sendForgotPasswordToken(user: Users, code: number) {
     await this.mailerService.sendMail({
       to: user.email,
-      subject: 'Забыли пароль?',
+      subject: emailMessages.en.sendForgotPasswordToken,
       template: __dirname + '/forgot-password',
       context: { code },
     });

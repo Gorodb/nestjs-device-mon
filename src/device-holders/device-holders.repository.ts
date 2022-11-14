@@ -27,7 +27,7 @@ export class DeviceHoldersRepository extends Repository<DeviceHolders> {
     { device }: DeviceHolderDto,
     user: Users,
   ): Promise<{ success: boolean }> {
-    this.logger.log(`Пользователь ${user.id} берет устройство ${device}`);
+    this.logger.log(`User with id ${user.id} have taken device ${device}`);
     const isHeld = await this.findDeviceHolder({ device });
     if (isHeld) {
       await this.update(isHeld.id, {

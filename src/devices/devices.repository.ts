@@ -10,7 +10,7 @@ export class DevicesRepository extends Repository<Devices> {
   async createDevice(devicesDto: DevicesDto): Promise<Devices> {
     const device = this.create(devicesDto);
     await this.save(device);
-    this.logger.log(`Создано устройство ${JSON.stringify(device)}`);
+    this.logger.log(`Created device ${JSON.stringify(device)}`);
     return device;
   }
 }

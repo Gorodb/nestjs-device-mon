@@ -14,7 +14,7 @@ export class DepartmentsRepository extends Repository<Departments> {
 
     const department = this.create({ name, description });
     await this.save(department);
-    this.logger.log(`Создан отдел ${JSON.stringify(department)}`);
+    this.logger.log(`Created department ${JSON.stringify(department)}`);
     return department;
   }
 }

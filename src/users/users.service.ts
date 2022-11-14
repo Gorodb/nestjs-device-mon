@@ -20,6 +20,7 @@ import {
 } from '../paginate/pagination.query-builder';
 import { UsersRoles } from './enums/users-roles.enum';
 import { CreateDepartmentDto } from '../departments/dto/create-department.dto';
+import {serviceMessages} from "./dto/userMessages";
 
 @Injectable()
 export class UsersService {
@@ -41,7 +42,7 @@ export class UsersService {
         .where('logo::jsonb @> :logo', { logo: { name: logo } })
         .getOne();
       if (!user) {
-        this.logger.log('info', `Удаляем неиспользуемое изображение: ${logo}`);
+        this.logger.log('info', `${serviceMessages.en.deletingImage}: ${logo}`);
         await remove(`${uploadPath}/${logo}`);
       }
     }
@@ -63,8 +64,8 @@ export class UsersService {
       let department = (await this.departmentsRepository.find())[0];
       if (!department) {
         const newDepartment: CreateDepartmentDto = {
-          name: 'wink',
-          description: 'Устройства в московском офисе направления wink',
+          name: 'Berlin',
+          description: 'Devices in go-e Berlin office',
         };
         department = await this.departmentsRepository.createDepartment(
           newDepartment,
@@ -111,7 +112,7 @@ export class UsersService {
     if (!affected) {
       throw new BadRequestException({
         success: false,
-        message: `Не удалось удалить пользователя с id ${id}`,
+        message: `${serviceMessages.en.unableToDeleteUserById} ${id}`,
       });
     }
     return { success: true };
@@ -120,7 +121,7 @@ export class UsersService {
   async getUserById(id: string): Promise<Users> {
     const user = await this.usersRepository.findOne(id);
     if (!user) {
-      throw new NotFoundException(`Пользователь с id ${id} не найден`);
+      throw new NotFoundException(`${serviceMessages.en.userNotFound} ${id}`);
     }
     return user;
   }

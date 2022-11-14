@@ -1,13 +1,14 @@
 import { IsEnum, IsString } from 'class-validator';
 import { Actions } from '../enums/actions.enum';
 import { enumToString } from '../../helpers/enum-helper';
+import { createUserMessages, pinCodesMessages} from './userMessages';
 
 export class SendCodeDto {
   @IsEnum(Actions, {
-    message: `Значение должно быть одним из: ${enumToString(Actions)}`,
+    message: `${pinCodesMessages.en.action}: ${enumToString(Actions)}`,
   })
   action: Actions;
 
-  @IsString({ message: 'Email должен быть строкой' })
+  @IsString({ message: createUserMessages.en.email })
   email: string;
 }
